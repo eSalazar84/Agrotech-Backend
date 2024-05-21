@@ -12,13 +12,13 @@ export class InvoicesDetailsService {
   constructor(@InjectRepository(InvoicesDetail) private readonly invoicesDetailsRepository: Repository<CreateInvoicesDetailDto>,
     @InjectRepository(Product) private readonly productRepository: Repository<CreateProductDto>) { }
 
-  async createInv_Det(createInvoicesDetailDto: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
+  /* async createInv_Det(createInvoicesDetailDto: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
     if (createInvoicesDetailDto.amount_sold <= 0) throw new HttpException({
       status: HttpStatus.NOT_ACCEPTABLE, error: `debe ingresar un valor mayor que cero.`
     }, HttpStatus.NOT_ACCEPTABLE)
     const newInv_Det = this.invoicesDetailsRepository.create(createInvoicesDetailDto)
     return this.invoicesDetailsRepository.save(newInv_Det)
-  }
+  } */
 
   async findAllDetailsInv_Det(): Promise<CreateInvoicesDetailDto[]> {
     return this.invoicesDetailsRepository.find({ relations: ['id_invoice', 'id_product'] });

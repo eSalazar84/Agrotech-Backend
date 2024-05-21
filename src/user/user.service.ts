@@ -123,11 +123,9 @@ export class UserService {
     if (!userFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: `No existe el usuario con el id ${userId}`
     }, HttpStatus.NOT_FOUND)
-    return await this.invoiceRepository.query(`
-      SELECT * FROM agrotech.invoice 
-        INNER JOIN agrotech.user
-          ON invoice.idUser = user.idUser
-            WHERE user.idUser = 27
-    `)
+    return await this.invoiceRepository
+      .createQueryBuilder('invoice')
+      .where('invoice.id_user = :userId', { userId })
+      .getMany();
   }
 }

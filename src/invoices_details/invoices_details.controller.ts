@@ -9,13 +9,13 @@ import { ApiBadRequestResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNot
 export class InvoicesDetailsController {
   constructor(private readonly invoicesDetailsService: InvoicesDetailsService) { }
 
-  @Post()
+ /*  @Post()
   @ApiCreatedResponse({ description: 'Invoice detail succefully created' })
   @ApiNotAcceptableResponse({ description: 'Must be insert a value greater than zero' })
   @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() createInvoicesDetailDto: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
     return this.invoicesDetailsService.createInv_Det(createInvoicesDetailDto);
-  }
+  } */
 
   @Get()
   findAll(): Promise<CreateInvoicesDetailDto[]> {

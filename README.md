@@ -1,73 +1,115 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Backend Agrotech
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![NestJS](https://img.shields.io/badge/NestJS-v7.0.0-red)](https://nestjs.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Descripción
 
-## Description
+Este proyecto aloja el servidor de Agrotech, y esta construido en [NestJS](https://nestjs.com/), permitiendo exponer Rest API. La idea es lograr una correcta comunicacion 
+entre la base de datos y el cliente que peticiona, devolviendo una respuesta efectiva.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tabla de Contenidos
 
-## Installation
+- [Instalación](#instalación)
+- [Uso](#uso)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Documentación de la API](#documentación-de-la-api)
+- [Pruebas](#pruebas)
+- [Contacto](#contacto)
 
-```bash
-$ npm install
+## Instalación
+
+### Prerrequisitos
+
+- Node.js (versión 12.x o superior)
+- npm (versión 6.x o superior)
+
+### Pasos de Instalación
+
+1. Clona el repositorio:
+    ```bash
+    git clone https://github.com/eSalazar84/Agrotech-Backend.git
+    cd tu-repositorio
+    ```
+
+2. Instala las dependencias:
+    ```bash
+    npm install
+    ```
+
+3. Configura las variables de entorno:
+    - Crea un archivo `.env.local` en la raíz del proyecto.
+    - Añade las siguientes variables según sea necesario:
+      ```env
+      PORT=3000
+      DATABASE_URL= Comunicate con nosotros :)
+      ...
+      ```
+
+## Uso
+
+### Levantar el Servidor
+
+Para iniciar el servidor en modo desarrollo:
+
+``` bash
+  npm run start:dev
+  ```
+
+## Estructura del proyecto
+
+src/
+│
+├── app.module.ts
+├── main.ts
+│
+├── helpers/
+│
+├── modules/
+│   ├── auth/
+│   ├── invoice/
+│   ├── invoice-details/
+│   ├── user/
+│   └── products/
+│
+├── uploads/
+
+## Documentacion de la API
+
+La documentación de la API se genera automáticamente utilizando Swagger.
+
+Para acceder a la documentación de la API, levanta el servidor y navega a http://localhost:3000/api
+
+## Pruebas Unitarias
+
+Pruebas Unitarias
+Para ejecutar las pruebas unitarias, usa el siguiente comando:
+
+``` bash
+npm run test
 ```
 
-## Running the app
+Pruebas End-to-End
+Para ejecutar las pruebas end-to-end, usa el siguiente comando:
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+``` bash
+npm run test:e2e
 ```
 
-## Test
+## Autores
 
-```bash
-# unit tests
-$ npm run test
+ - Autores, e-mail de contacto y link al perfil de GitHub 
 
-# e2e tests
-$ npm run test:e2e
+    Anabel Assann 
+      assannanabel@gmail.com
+      [perfil de GitHub](https://github.com/AssannAnabel)      
 
-# test coverage
-$ npm run test:cov
-```
+    Fabricio Cordoba
+      fabricio.cbe@gmail.com, 
+      [perfil de GitHub](https://github.com/FabricioCordoba)
 
-## Support
+    Emiliano Salazar
+      salazaremiliano84@gmail.com
+      [perfil de GitHub](https://github.com/eSalazar84)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
