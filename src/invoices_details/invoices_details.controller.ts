@@ -9,13 +9,13 @@ import { ApiBadRequestResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNot
 export class InvoicesDetailsController {
   constructor(private readonly invoicesDetailsService: InvoicesDetailsService) { }
 
- /*  @Post()
-  @ApiCreatedResponse({ description: 'Invoice detail succefully created' })
-  @ApiNotAcceptableResponse({ description: 'Must be insert a value greater than zero' })
-  @UsePipes(new ValidationPipe({ transform: true }))
-  create(@Body() createInvoicesDetailDto: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
-    return this.invoicesDetailsService.createInv_Det(createInvoicesDetailDto);
-  } */
+  /*  @Post()
+   @ApiCreatedResponse({ description: 'Invoice detail succefully created' })
+   @ApiNotAcceptableResponse({ description: 'Must be insert a value greater than zero' })
+   @UsePipes(new ValidationPipe({ transform: true }))
+   create(@Body() createInvoicesDetailDto: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
+     return this.invoicesDetailsService.createInv_Det(createInvoicesDetailDto);
+   } */
 
   @Get()
   findAll(): Promise<CreateInvoicesDetailDto[]> {
@@ -49,7 +49,11 @@ export class InvoicesDetailsController {
   @ApiBadRequestResponse({ description: 'Request not valid' })
   @UsePipes(new ValidationPipe({ transform: true }))
   async createInvoiceForProduct(@Body() createinvoiceDetailsData: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
-    return this.invoicesDetailsService.addInvoiceDetail(createinvoiceDetailsData);
+    return this.invoicesDetailsService.addInvoiceDetail(
+      createinvoiceDetailsData.amount_sold,
+      createinvoiceDetailsData.id_product,
+      createinvoiceDetailsData.id_invoice
+    );
   }
 
 }

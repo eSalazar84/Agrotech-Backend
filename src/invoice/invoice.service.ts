@@ -62,7 +62,7 @@ export class InvoiceService {
     return await this.invoiceRepository.save(invoiceFound);
   } */
 
-  async createInvoice(userId: number, productsId: IProduct): Promise<CreateInvoiceDto> {
+  /* async createInvoice(userId: number, productsId: IProduct): Promise<CreateInvoiceDto> {
     const query: FindOneOptions = { where: { idUser: userId } }
     const userFound = await this.userRepository.findOne(query)
     if (!userFound) {
@@ -100,5 +100,7 @@ export class InvoiceService {
     totalWithoutIva += productFound.price * productsId.amount;
 
     return await this.invoiceRepository.save(savedInvoice);
-  }
+  } */
+
+  
 }

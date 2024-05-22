@@ -106,13 +106,16 @@ export class UserService {
     return rest
   }
 
-  async createInvoiceForUser(userId: number, invoiceData: CreateInvoiceDto): Promise<CreateInvoiceDto> {
+  async createInvoiceForUser(userId: number, total_without_iva: number): Promise<CreateInvoiceDto> {
     const query: FindOneOptions = { where: { idUser: userId } }
     const userFound = await this.userRepository.findOne(query)
     if (!userFound || userFound.active === false) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: `No existe el usuario con el id ${userId}`
     }, HttpStatus.NOT_FOUND)
-    const newInvoice = this.invoiceRepository.create(invoiceData)
+    const newInvoice = this.invoiceRepository.create({
+      id_user: userId,
+      total_without_iva: total_without_iva
+    })
     await this.invoiceRepository.save(newInvoice)
     return newInvoice
   }

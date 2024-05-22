@@ -13,6 +13,7 @@ entre la base de datos y el cliente que peticiona, devolviendo una respuesta efe
 - [Instalación](#instalación)
 - [Uso](#uso)
 - [Estructura del Proyecto](#estructura-del-proyecto)
+- [Dependencias](#dependencias)
 - [Documentación de la API](#documentación-de-la-api)
 - [Pruebas](#pruebas)
 - [Contacto](#contacto)
@@ -23,6 +24,7 @@ entre la base de datos y el cliente que peticiona, devolviendo una respuesta efe
 
 - Node.js (versión 12.x o superior)
 - npm (versión 6.x o superior)
+- Git ()
 
 ### Pasos de Instalación
 
@@ -58,6 +60,7 @@ Para iniciar el servidor en modo desarrollo:
 
 ## Estructura del proyecto
 
+```
 src/
 │
 ├── app.module.ts
@@ -73,12 +76,19 @@ src/
 │   └── products/
 │
 ├── uploads/
+```
+
+## Dependencias
+
+- [NestJS](https://nestjs.com/)
+- [TypeORM]()
+
 
 ## Documentacion de la API
 
-La documentación de la API se genera automáticamente utilizando Swagger.
+La documentacion de la API esta generada mediante SWAGGER
 
-Para acceder a la documentación de la API, levanta el servidor y navega a http://localhost:3000/api
+Para acceder a la documentación de la API, dirigite a http://localhost:3000/agrotech-api
 
 ## Pruebas Unitarias
 

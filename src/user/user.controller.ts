@@ -54,8 +54,8 @@ export class UserController {
   @ApiCreatedResponse({ description: 'User succefully created' })
   @ApiBadRequestResponse({ description: 'Request not valid' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  async createInvoiceForUser(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number, @Body() createinvoiceData: CreateInvoiceDto): Promise<CreateInvoiceDto> {
-    return this.userService.createInvoiceForUser(id, createinvoiceData);
+  async createInvoiceForUser(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number, @Body() total_without_iva: number): Promise<CreateInvoiceDto> {
+    return this.userService.createInvoiceForUser(id, total_without_iva);
   }
 
   @Get(':id/invoices')
