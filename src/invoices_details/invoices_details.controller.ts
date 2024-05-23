@@ -45,11 +45,12 @@ export class InvoicesDetailsController {
   }
 
   @Post()
-  @ApiNotFoundResponse({ description: 'Invoice detail not found' })
-  @ApiBadRequestResponse({ description: 'Request not valid' })
+  @ApiNotFoundResponse({ description: 'Product not found' })
+  @ApiBadRequestResponse({ description: 'Request not valid or insufficient stock' })
   @UsePipes(new ValidationPipe({ transform: true }))
-  async createInvoiceForProduct(@Body() createinvoiceDetailsData: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
-    return this.invoicesDetailsService.addInvoiceDetail(createinvoiceDetailsData);
+  async createInvoiceForProduct(@Body() createInvoiceDetailsData: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
+    return this.invoicesDetailsService.addInvoiceDetail(createInvoiceDetailsData);
   }
-
 }
+
+

@@ -42,7 +42,7 @@ export class UserController {
     return await this.userService.updateUser(id, updateUserDto);
   }
 
-  @UseGuards(AuthGuard)
+ // @UseGuards(AuthGuard)
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized access' })
   @Delete(':id')

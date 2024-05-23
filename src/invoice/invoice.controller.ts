@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus, ParseIntPipe, UseGuards, HttpException } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -7,6 +7,8 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 import { CreateProductDto } from 'src/product/dto/create-product.dto';
 import { IProduct } from 'src/product/interface/product.interface';
+import { Invoice } from './entities/invoice.entity';
+
 
 @ApiTags('invoices')
 @Controller('invoices')
@@ -14,8 +16,12 @@ export class InvoiceController {
   constructor(private readonly invoiceService: InvoiceService) { }
 
   @Get()
-  async findAll(): Promise<CreateInvoiceDto[]> {
-    return await this.invoiceService.findAllInvoice();
+  async findAll(): Promise<Invoice[]> {
+    try {
+      return await this.invoiceService.findAllInvoice();
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get(':id')
@@ -38,8 +44,15 @@ export class InvoiceController {
     return this.invoiceService.addDetailsToInvoice(id, createinvoiceDetailsData);
   } */
 
-  @Post()
-  async createInvoice(@Body() createInvoiceDto: CreateInvoiceDto, product: IProduct): Promise<CreateInvoiceDto> {
-    return this.invoiceService.createInvoice(createInvoiceDto.id_user, product);
+  @Post(':userId')
+  async createInvoice(
+    @Param('userId') userId: number,
+    @Body('products') products: IProduct[],
+  ): Promise<CreateInvoiceDto> {
+    try {
+      return await this.invoiceService.createInvoice(userId, products);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
