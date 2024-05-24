@@ -25,12 +25,14 @@ export class InvoiceController {
   }
 
   @Get(':id')
-  @ApiNotFoundResponse({ description: 'Invoice not found' })
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async findOne(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateInvoiceDto> {
-    return await this.invoiceService.findOneInvoice(id);
+  async findOne(@Param('id') id: number): Promise<Invoice> {
+    try {
+      return await this.invoiceService.findOneInvoice(id);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
-
+  
   @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiNotFoundResponse({ description: 'Invoice not found' })

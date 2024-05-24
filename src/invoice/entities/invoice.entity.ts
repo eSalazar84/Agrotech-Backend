@@ -22,6 +22,7 @@ export class Invoice {
 
     @OneToMany(() => InvoicesDetail, invoiceDetail => invoiceDetail.invoice)
     public invoiceDetails: InvoicesDetail[]
+    product: any;
     
 //--------------------------------------------------------------------------------------------------------------------
 

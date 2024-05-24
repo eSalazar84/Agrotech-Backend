@@ -12,15 +12,33 @@ import { IProduct } from 'src/product/interface/product.interface';
 export class InvoiceService {
   async findAllInvoice(): Promise<Invoice[]> {
     try {
-      return await this.invoiceRepository.find({ relations: ['user', 'invoicesDetails', 'invoicesDetails.product'] });
+      console.log('Attempting to retrieve all invoices...');
+      const invoices = await this.invoiceRepository.find({ relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
+      console.log('Invoices retrieved:', invoices);
+      return invoices;
     } catch (error) {
+      console.error('Error retrieving invoices:', error);
       throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  findOneInvoice(id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
-    throw new Error('Method not implemented.');
+
+  async findOneInvoice(id: number): Promise<Invoice> {
+    try {
+      console.log('Attempting to retrieve invoice with ID:', id);
+      const invoice = await this.invoiceRepository.findOne({ where: { idInvoice: id }, relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
+
+      if (!invoice) {
+        throw new HttpException('Invoice not found', HttpStatus.NOT_FOUND);
+      }
+      console.log('Invoice retrieved:', invoice);
+      return invoice;
+    } catch (error) {
+      console.error('Error retrieving invoice:', error);
+      throw new HttpException('Failed to retrieve invoice', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
-  removeInvoice(id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
+  
+  removeInvoice(_id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
     throw new Error('Method not implemented.');
   }
   constructor(
