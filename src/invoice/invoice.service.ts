@@ -10,37 +10,23 @@ import { IProduct } from 'src/product/interface/product.interface';
 
 @Injectable()
 export class InvoiceService {
-  async findAllInvoice(): Promise<Invoice[]> {
-    try {
-      return await this.invoiceRepository.find({ relations: ['user', 'invoicesDetails', 'invoicesDetails.product'] });
-    } catch (error) {
-      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-  findOneInvoice(id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
-    throw new Error('Method not implemented.');
-  }
-  removeInvoice(id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
     @InjectRepository(InvoicesDetail)
     private readonly invoicesDetailsRepository: Repository<InvoicesDetail>,
     private readonly dataSource: DataSource,
-  ) {}
+  ) { }
 
   async createInvoice(userId: number, products: IProduct[]): Promise<CreateInvoiceDto> {
     const query: FindOneOptions<User> = { where: { idUser: userId } };
     const userFound = await this.userRepository.findOne(query);
-    if (!userFound) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+    if (!userFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe el usuario con el id ${userId}`
+    }, HttpStatus.NOT_FOUND)
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -59,7 +45,12 @@ export class InvoiceService {
         const productFound = await queryRunner.manager.findOne(Product, queryProduct);
 
         if (!productFound || productFound.amount < item.amount) {
-          throw new HttpException(`Product with ID ${item.idProduct} not found or insufficient stock`, HttpStatus.BAD_REQUEST);
+          throw new HttpException({
+            status: HttpStatus.BAD_REQUEST,
+            error: `El producto con el id ${item.idProduct} no fue encontrado o no hay suficiente stock`,
+          },
+            HttpStatus.BAD_REQUEST
+          );
         }
 
         const invoiceDetail = this.invoicesDetailsRepository.create({
@@ -86,7 +77,7 @@ export class InvoiceService {
         invoiceDate: finalInvoice.invoiceDate,
         total_without_iva: finalInvoice.total_without_iva,
         total_with_iva: finalInvoice.total_with_iva,
-        id_user: userFound.idUser,  // Usa la propiedad correcta aquí
+        id_user: userFound.idUser, 
       };
 
       return invoiceDto;
@@ -98,17 +89,26 @@ export class InvoiceService {
     }
   }
 
- 
-
-  findOne(id: number) {
-    return this.invoiceRepository.findOne({ where: { idInvoice: id }, relations: ['user', 'invoiceDetails'] });
+  async findAllInvoice(): Promise<Invoice[]> {
+    return this.invoiceRepository.find({ relations: ['invoiceDetails', 'user', 'invoiceDetails.product'] })
   }
 
-  update(id: number, updateInvoiceDto: CreateInvoiceDto) {
-    return this.invoiceRepository.update(id, updateInvoiceDto);
+  async findOneInvoice(id: number): Promise<Invoice> {
+    const query: FindOneOptions = { where: { idInvoice: id }, relations: ['user', 'invoiceDetails'] }
+    const invoiceFound = await this.invoiceRepository.findOne(query)
+    if (!invoiceFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND, error: `no existe una factura con el id ${id} `
+    }, HttpStatus.NOT_FOUND)
+    return invoiceFound;
   }
 
-  remove(id: number) {
-    return this.invoiceRepository.delete(id);
+  async removeInvoice(id: number): Promise<Invoice> {
+    const query: FindOneOptions = { where: { idInvoice: id } }
+    const invoiceFound = await this.invoiceRepository.findOne(query)
+    if (!invoiceFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND, error: `no existe una factura con el id ${id} `
+    }, HttpStatus.NOT_FOUND)
+    const removeInvoice = await this.invoiceRepository.remove(invoiceFound)
+    return removeInvoice
   }
 }

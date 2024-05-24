@@ -18,7 +18,8 @@ export const fileFilter = (req, file, cb) => {
     if (!file.originalname.match(/\.csv$/)) {
 
         return cb(new HttpException({
-            status: HttpStatus.BAD_REQUEST, error: `El archivo a subir debe ser de extension .csv`
+            status: HttpStatus.BAD_REQUEST,
+            error: `El archivo a subir debe ser de extension .csv`
         }, HttpStatus.BAD_REQUEST), false);
     }
 

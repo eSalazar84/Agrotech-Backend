@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -34,7 +34,8 @@ export class AuthService {
 
         if (userFound.password !== userAuth.password || userFound.active === false) {
             throw new HttpException({
-                status: HttpStatus.UNAUTHORIZED, error: `Contraseña o email incorrecto`
+                status: HttpStatus.UNAUTHORIZED,
+                error: `Contraseña o email incorrecto`
             }, HttpStatus.UNAUTHORIZED)
         }
     }

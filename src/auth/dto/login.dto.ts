@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer"
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator"
 
-export class LoginDto{
+export class LoginDto {
     @IsEmail()
     @IsNotEmpty()
     @Expose()

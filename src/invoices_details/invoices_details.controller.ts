@@ -1,21 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, ParseIntPipe, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, UsePipes, ValidationPipe, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { InvoicesDetailsService } from './invoices_details.service';
 import { CreateInvoicesDetailDto } from './dto/create-invoices_detail.dto';
 import { UpdateInvoicesDetailDto } from './dto/update-invoices_detail.dto';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotAcceptableResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
+import { ApiNotAcceptableResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('invoices-details')
 @Controller('invoices-details')
 export class InvoicesDetailsController {
   constructor(private readonly invoicesDetailsService: InvoicesDetailsService) { }
-
-  /*  @Post()
-   @ApiCreatedResponse({ description: 'Invoice detail succefully created' })
-   @ApiNotAcceptableResponse({ description: 'Must be insert a value greater than zero' })
-   @UsePipes(new ValidationPipe({ transform: true }))
-   create(@Body() createInvoicesDetailDto: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
-     return this.invoicesDetailsService.createInv_Det(createInvoicesDetailDto);
-   } */
 
   @Get()
   findAll(): Promise<CreateInvoicesDetailDto[]> {
@@ -42,14 +34,6 @@ export class InvoicesDetailsController {
   @UsePipes(new ValidationPipe({ transform: true }))
   remove(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number) {
     return this.invoicesDetailsService.removeInv_Det(id);
-  }
-
-  @Post()
-  @ApiNotFoundResponse({ description: 'Product not found' })
-  @ApiBadRequestResponse({ description: 'Request not valid or insufficient stock' })
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async createInvoiceForProduct(@Body() createInvoiceDetailsData: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
-    return this.invoicesDetailsService.addInvoiceDetail(createInvoiceDetailsData);
   }
 }
 
