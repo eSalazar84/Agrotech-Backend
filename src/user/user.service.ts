@@ -24,9 +24,12 @@ export class UserService {
     const userFound = await this.userRepository.findOne({ where: { email: createUserDto.email } });
 
     if (userFound && userFound.active === false) {
+    console.log("usuarioApi", userFound);
+
       userFound.active = true;
       createUserDto.password = await this.hashPassword(createUserDto.password)
       await this.userRepository.save(userFound);
+      
       return userFound;
     }
 

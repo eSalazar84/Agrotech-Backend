@@ -5,7 +5,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    private idUser: number
+   idUser: number
 
     @Column({ type: 'varchar', length: 45, nullable: false })
     private name: string
@@ -34,7 +34,7 @@ export class User {
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     private createdAt: Date
 
-    @OneToMany(() => Invoice, invoice => invoice.id_user)
+    @OneToMany(() => Invoice, invoice => invoice.user)
     public invoice: Invoice[]
 
     constructor(name: string, lastname: string, email: string, password: string, rol: Rol, active: boolean, phone: string, birthDate: Date, createdAt: Date) {

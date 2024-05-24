@@ -5,13 +5,13 @@ export class CreateInvoicesDetailDto {
     @Expose()
     @IsNumber()
     @IsNotEmpty()
-    amount_sold: number
+    readonly amount_sold: number;
 
     @Expose()
     @IsNotEmpty()
-    readonly id_product: number
+    readonly id_product: number;
 
     @Expose()
     @IsNotEmpty()
-    readonly id_invoice: number
+    readonly id_invoice: number;
 }

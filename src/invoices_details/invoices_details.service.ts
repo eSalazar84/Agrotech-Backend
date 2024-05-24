@@ -56,27 +56,21 @@ export class InvoicesDetailsService {
     return removeDetails
   }
 
-  // createInvoiceDto: { userId: number, products: { inventoryId: number, amount: number }[] }
-  async addInvoiceDetail(idProduct: number, idInvoice: number, amount_sold: number ): Promise<CreateInvoicesDetailDto> {
-    const query: FindOneOptions = { where: { idProduct: idProduct } }
-    const productFound = await this.productRepository.findOne(query)
-    if (!productFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe el producto con el id ${idProduct}`
-    }, HttpStatus.NOT_FOUND)
-    if (productFound.amount < amount_sold) throw new HttpException({
-      status: HttpStatus.BAD_REQUEST, error: `No hay suficiente stock para vender`
-    }, HttpStatus.BAD_REQUEST)
+  async addInvoiceDetail(invDetailData: CreateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
+    const productFound = await this.productRepository.findOne({ where: { idProduct: invDetailData.id_product } });
+    if (!productFound) {
+      throw new HttpException(`Product with ID ${invDetailData.id_product} not found`, HttpStatus.NOT_FOUND);
+    }
+    if (productFound.amount < invDetailData.amount_sold) {
+      throw new HttpException('Insufficient stock for sale', HttpStatus.BAD_REQUEST);
+    }
 
-
-    // Actualizar el stock en Product
-    productFound.amount -= amount_sold;
+    // Update the stock in Product
+    productFound.amount -= invDetailData.amount_sold;
     await this.productRepository.save(productFound);
 
-    const create = this.invoicesDetailsRepository.create({
-      id_invoice: idInvoice,
-      amount_sold: amount_sold,
-      id_product: idProduct
-    });
-    return await this.invoicesDetailsRepository.save(create)
+    const invoiceDetail = this.invoicesDetailsRepository.create(invDetailData);
+    return await this.invoicesDetailsRepository.save(invoiceDetail);
   }
+
 }
