@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { FindOneOptions, Repository, getManager } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { Category } from 'src/helpers/enums-type.enum';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -11,12 +11,15 @@ import * as csv from 'fast-csv';
 
 @Injectable()
 export class ProductService {
-  constructor(@InjectRepository(Product) private readonly productRepository: Repository<CreateProductDto>) { }
+  constructor(
+    @InjectRepository(Product) private readonly productRepository: Repository<CreateProductDto>
+  ) { }
 
   async createProduct(createProductDto: CreateProductDto): Promise<CreateProductDto> {
     const query = await this.productRepository.findOne({ where: { product: createProductDto.product } })
     if (query) throw new HttpException({
-      status: HttpStatus.CONFLICT, error: `el producto ${createProductDto.product} ya esta cargado en el sistema`
+      status: HttpStatus.CONFLICT,
+      error: `el producto ${createProductDto.product} ya esta cargado en el sistema`
     }, HttpStatus.CONFLICT)
     const newUser = this.productRepository.create(createProductDto);
     return this.productRepository.save(newUser)
@@ -30,7 +33,8 @@ export class ProductService {
     const query: FindOneOptions = { where: { idProduct: id }, relations: ['invoice_detail'] }
     const productFound = await this.productRepository.findOne(query)
     if (!productFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe un producto con el id ${id}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe un producto con el id ${id}`
     }, HttpStatus.NOT_FOUND)
     return productFound;
   }
@@ -39,7 +43,8 @@ export class ProductService {
     const queryFound: FindOneOptions = { where: { idProduct: id } }
     const productFound = await this.productRepository.findOne(queryFound)
     if (!productFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe un producto con el id ${id}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe un producto con el id ${id}`
     }, HttpStatus.NOT_FOUND)
     /* const queryProductFound = await this.productRepository.findOne({ where: { product: updateProductDto.product } })
     if (queryProductFound) throw new HttpException({
@@ -53,7 +58,8 @@ export class ProductService {
     const query: FindOneOptions = { where: { idProduct: id } }
     const productFound = await this.productRepository.findOne(query)
     if (!productFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe un producto con el id ${id}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe un producto con el id ${id}`
     }, HttpStatus.NOT_FOUND)
     const removeUser = await this.productRepository.remove(productFound)
     return removeUser
@@ -64,7 +70,8 @@ export class ProductService {
       category
     })
     if (!productFound.length) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No hay productos de ${category}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No hay productos de ${category}`
     }, HttpStatus.NOT_FOUND)
     return productFound
   }

@@ -11,5 +11,5 @@ export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
     @IsNotEmpty()
     readonly total_without_iva?: number
 
-    readonly id_user?:number
+    readonly id_user?: number
 }

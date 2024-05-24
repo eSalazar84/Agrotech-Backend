@@ -1,4 +1,3 @@
-
 import { Expose } from 'class-transformer'
 
 import { IsNumber, IsNotEmpty, IsDateString } from 'class-validator';
@@ -16,14 +15,12 @@ export class CreateInvoiceDto {
   @IsNumber()
   @IsNotEmpty()
   @Expose()
-   total_with_iva: number;
+  total_with_iva: number;
 
   @IsNumber()
   @IsNotEmpty()
   @Expose()
   readonly id_user: number;
-
-
 }
 
 
