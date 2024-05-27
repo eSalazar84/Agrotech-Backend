@@ -7,7 +7,6 @@ import { User } from 'src/user/entities/user.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { InvoicesDetail } from 'src/invoices_details/entities/invoices_detail.entity';
 import { IProduct } from 'src/product/interface/product.interface';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class InvoiceService {
@@ -15,19 +14,18 @@ export class InvoiceService {
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
     @InjectRepository(User)
-    private readonly userRepository: Repository<CreateUserDto>,
+    private readonly userRepository: Repository<User>,
     @InjectRepository(InvoicesDetail)
     private readonly invoicesDetailsRepository: Repository<InvoicesDetail>,
     private readonly dataSource: DataSource,
   ) { }
 
-  async createInvoice(idUser: number, products: IProduct[]): Promise<CreateInvoiceDto> {
-    const query: FindOneOptions<CreateUserDto> = { where: { idUser } };
+  async createInvoice(userId: number, products: IProduct[]): Promise<CreateInvoiceDto> {
+    const query: FindOneOptions<User> = { where: { idUser: userId } };
     const userFound = await this.userRepository.findOne(query);
-    if (!userFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: `No existe el usuario con el id ${idUser}`
-    }, HttpStatus.NOT_FOUND)
+    if (!userFound) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -46,12 +44,7 @@ export class InvoiceService {
         const productFound = await queryRunner.manager.findOne(Product, queryProduct);
 
         if (!productFound || productFound.amount < item.amount) {
-          throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            error: `El producto con el id ${item.idProduct} no fue encontrado o no hay suficiente stock`,
-          },
-            HttpStatus.BAD_REQUEST
-          );
+          throw new HttpException(`Product with ID ${item.idProduct} not found or insufficient stock`, HttpStatus.BAD_REQUEST);
         }
 
         const invoiceDetail = this.invoicesDetailsRepository.create({
@@ -78,7 +71,7 @@ export class InvoiceService {
         invoiceDate: finalInvoice.invoiceDate,
         total_without_iva: finalInvoice.total_without_iva,
         total_with_iva: finalInvoice.total_with_iva,
-        id_user: userFound.idUser, 
+        id_user: userFound.idUser,  // Usa la propiedad correcta aquí
       };
 
       return invoiceDto;
