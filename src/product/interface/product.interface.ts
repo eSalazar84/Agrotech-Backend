@@ -1,4 +1,4 @@
-import { Category } from "src/helpers/enums-type.enum"
+import { Category } from "../../helpers/enums-type.enum"
 
 export interface IProduct {
     idProduct: number,

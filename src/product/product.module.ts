@@ -3,7 +3,7 @@ import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { InvoicesDetail } from 'src/invoices_details/entities/invoices_detail.entity';
+import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product, InvoicesDetail])],

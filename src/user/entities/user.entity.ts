@@ -1,5 +1,5 @@
 import { Rol } from "../../helpers/enums-type.enum";
-import { Invoice } from "src/invoice/entities/invoice.entity";
+import { Invoice } from "../../invoice/entities/invoice.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer'
 import { IsString, IsNumber, IsEnum, IsNotEmpty, MaxLength } from 'class-validator'
-import { Category } from 'src/helpers/enums-type.enum'
+import { Category } from '../../helpers/enums-type.enum'
 
 export class CreateProductDto {
 

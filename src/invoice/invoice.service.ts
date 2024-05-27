@@ -3,10 +3,10 @@ import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource, FindOneOptions } from 'typeorm';
 import { Invoice } from './entities/invoice.entity';
-import { User } from 'src/user/entities/user.entity';
-import { Product } from 'src/product/entities/product.entity';
-import { InvoicesDetail } from 'src/invoices_details/entities/invoices_detail.entity';
-import { IProduct } from 'src/product/interface/product.interface';
+import { User } from '../user/entities/user.entity';
+import { Product } from '../product/entities/product.entity';
+import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.entity';
+import { IProduct } from '../product/interface/product.interface';
 
 @Injectable()
 export class InvoiceService {

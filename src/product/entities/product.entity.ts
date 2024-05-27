@@ -1,8 +1,8 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Category } from "src/helpers/enums-type.enum";
-import { InvoicesDetail } from "src/invoices_details/entities/invoices_detail.entity";
-import { getThreeWords } from "src/helpers/helpers";
-import { Invoice } from "src/invoice/entities/invoice.entity";
+import { Category } from "../../helpers/enums-type.enum";
+import { InvoicesDetail } from "../../invoices_details/entities/invoices_detail.entity";
+import { getThreeWords } from "../../helpers/helpers";
+
 
 @Entity()
 export class Product {
