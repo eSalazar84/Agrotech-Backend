@@ -32,7 +32,10 @@ export class InvoiceController {
       throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
+    @Get('user/:userId')
+    async findInvoiceByUser(@Param('userId', ParseIntPipe) userId: number): Promise<Invoice[]> {
+      return this.invoiceService.findInvoiceByUser(userId);
+    }
   @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiNotFoundResponse({ description: 'Invoice not found' })

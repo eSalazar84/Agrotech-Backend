@@ -37,6 +37,23 @@ export class InvoiceService {
       throw new HttpException('Failed to retrieve invoice', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  async findInvoiceByUser(userId: number): Promise<Invoice[]> {
+    try {
+      const invoices = await this.invoiceRepository.find({
+        where: { user: { idUser: userId } },
+        relations: ['user', 'invoiceDetails', 'invoiceDetails.product'],
+      });
+
+      if (!invoices.length) {
+        throw new HttpException('No invoices found for this user', HttpStatus.NOT_FOUND);
+      }
+
+      return invoices;
+    } catch (error) {
+      console.error('Error retrieving invoices:', error);
+      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
   
   removeInvoice(_id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
     throw new Error('Method not implemented.');

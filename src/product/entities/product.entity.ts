@@ -29,6 +29,7 @@ export class Product {
 
     @Column({ type: 'varchar', length: 255 })
     images: string
+
     invoiceDetails: any;
 
     @BeforeInsert()
@@ -36,8 +37,9 @@ export class Product {
     getNameForCodeProduct() {
         this.codeProduct = getThreeWords(this.category)
     }
-    @OneToMany(() => Invoice, invoice => invoice.product)
-    invoices: Invoice[];
-    
+    // @OneToMany(() => Invoice, invoice => invoice.product)
+    // invoices: Invoice[];
+    @OneToMany(() => InvoicesDetail, invoiceDetail => invoiceDetail.product)
+    public invoice_detail: InvoicesDetail[]
 
 }

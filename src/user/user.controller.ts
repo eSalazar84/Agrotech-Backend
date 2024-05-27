@@ -50,17 +50,6 @@ export class UserController {
     return this.userService.removeUser(id);
   }
 
-  @Post(':id/invoices')
-  @ApiCreatedResponse({ description: 'User succefully created' })
-  @ApiBadRequestResponse({ description: 'Request not valid' })
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async createInvoiceForUser(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number, @Body() createinvoiceData: CreateInvoiceDto): Promise<CreateInvoiceDto> {
-    return this.userService.createInvoiceForUser(id, createinvoiceData);
+
   }
 
-  @Get(':id/invoices')
-  @ApiNotFoundResponse({ description: 'User not found' })
-  async findInvoicesFromUser(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateInvoiceDto[]> {
-    return await this.userService.findInvoicesFromOneUser(id)
-  }
-}

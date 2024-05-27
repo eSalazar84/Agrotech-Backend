@@ -111,15 +111,5 @@ export class UserService {
 
   
 
-  async findInvoicesFromOneUser(userId: number): Promise<CreateInvoiceDto[]> {
-    const query: FindOneOptions = { where: { idUser: userId } }
-    const userFound = await this.userRepository.findOne(query)
-    if (!userFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe el usuario con el id ${userId}`
-    }, HttpStatus.NOT_FOUND)
-    return await this.invoiceRepository
-      .createQueryBuilder('invoice')
-      .where('invoice.id_user = :userId', { userId })
-      .getMany();
-  }
+ 
 }
