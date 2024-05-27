@@ -2,10 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseInt
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Category } from 'src/helpers/enums-type.enum';
+import { Category } from '../helpers/enums-type.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { fileFilter, renameFile } from 'src/helpers/helpers';
+import { fileFilter, renameFile } from '../helpers/helpers';
 import { ApiBadRequestResponse, ApiBody, ApiConflictResponse, ApiConsumes, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('products')

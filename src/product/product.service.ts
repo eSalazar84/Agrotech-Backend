@@ -4,7 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { Category } from 'src/helpers/enums-type.enum';
+import { Category } from '../helpers/enums-type.enum';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'fast-csv';

@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Param, Delete, UsePipes, ValidationPipe, HttpStatus, ParseIntPipe, UseGuards, HttpException } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { AuthGuard } from '../auth/guard/auth.guard';
 import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
-import { IProduct } from 'src/product/interface/product.interface';
+import { IProduct } from '../product/interface/product.interface';
 import { Invoice } from './entities/invoice.entity';
 
 

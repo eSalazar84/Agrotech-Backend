@@ -1,5 +1,4 @@
-import { Expose } from 'class-transformer'
-
+import { Expose } from 'class-transformer';
 import { IsNumber, IsNotEmpty, IsDateString } from 'class-validator';
 
 export class CreateInvoiceDto {

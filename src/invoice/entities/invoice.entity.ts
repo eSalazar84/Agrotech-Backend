@@ -1,5 +1,5 @@
-import { InvoicesDetail } from "src/invoices_details/entities/invoices_detail.entity";
-import { User } from "src/user/entities/user.entity";
+import { InvoicesDetail } from "../../invoices_details/entities/invoices_detail.entity";
+import { User } from "../../user/entities/user.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
