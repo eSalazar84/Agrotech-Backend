@@ -7,6 +7,7 @@ import { User } from 'src/user/entities/user.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { InvoicesDetail } from 'src/invoices_details/entities/invoices_detail.entity';
 import { IProduct } from 'src/product/interface/product.interface';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class InvoiceService {
@@ -14,18 +15,18 @@ export class InvoiceService {
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: Repository<CreateUserDto>,
     @InjectRepository(InvoicesDetail)
     private readonly invoicesDetailsRepository: Repository<InvoicesDetail>,
     private readonly dataSource: DataSource,
   ) { }
 
-  async createInvoice(userId: number, products: IProduct[]): Promise<CreateInvoiceDto> {
-    const query: FindOneOptions<User> = { where: { idUser: userId } };
+  async createInvoice(idUser: number, products: IProduct[]): Promise<CreateInvoiceDto> {
+    const query: FindOneOptions<CreateUserDto> = { where: { idUser } };
     const userFound = await this.userRepository.findOne(query);
     if (!userFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
-      error: `No existe el usuario con el id ${userId}`
+      error: `No existe el usuario con el id ${idUser}`
     }, HttpStatus.NOT_FOUND)
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -90,7 +91,7 @@ export class InvoiceService {
   }
 
   async findAllInvoice(): Promise<Invoice[]> {
-    return this.invoiceRepository.find({ relations: ['invoiceDetails', 'user', 'invoiceDetails.product'] })
+    return this.invoiceRepository.find({ relations: ['invoiceDetails', 'invoiceDetails.product'] })
   }
 
   async findOneInvoice(id: number): Promise<Invoice> {
