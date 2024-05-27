@@ -26,11 +26,11 @@ export class ProductService {
   }
 
   async findAllProduct(): Promise<CreateProductDto[]> {
-    return this.productRepository.find({ relations: ['invoice_detail'] });
+    return this.productRepository.find({ relations: ['invoiceDetails'] });
   }
 
   async findOneProduct(id: number): Promise<CreateProductDto> {
-    const query: FindOneOptions = { where: { idProduct: id }, relations: ['invoice_detail'] }
+    const query: FindOneOptions = { where: { idProduct: id }, relations: ['invoiceDetails'] }
     const productFound = await this.productRepository.findOne(query)
     if (!productFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,

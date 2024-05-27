@@ -28,7 +28,6 @@ export class Product {
 
     @Column({ type: 'varchar', length: 255 })
     images: string
-    invoiceDetails: any;
 
     @BeforeInsert()
     @BeforeUpdate()
@@ -37,6 +36,6 @@ export class Product {
     }
 
     @OneToMany(() => InvoicesDetail, invoiceDetail => invoiceDetail.product)
-    public invoice_detail: InvoicesDetail[]
+    public invoiceDetails: InvoicesDetail[]
 
 }
