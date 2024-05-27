@@ -1,11 +1,11 @@
-import { Rol } from "src/helpers/enums-type.enum";
+import { Rol } from "../../helpers/enums-type.enum";
 import { Invoice } from "src/invoice/entities/invoice.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-   idUser: number
+    idUser: number
 
     @Column({ type: 'varchar', length: 45, nullable: false })
     private name: string

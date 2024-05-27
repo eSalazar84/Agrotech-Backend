@@ -10,65 +10,15 @@ import { IProduct } from 'src/product/interface/product.interface';
 
 @Injectable()
 export class InvoiceService {
-  async findAllInvoice(): Promise<Invoice[]> {
-    try {
-      console.log('Attempting to retrieve all invoices...');
-      const invoices = await this.invoiceRepository.find({ relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
-      console.log('Invoices retrieved:', invoices);
-      return invoices;
-    } catch (error) {
-      console.error('Error retrieving invoices:', error);
-      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  async findOneInvoice(id: number): Promise<Invoice> {
-    try {
-      console.log('Attempting to retrieve invoice with ID:', id);
-      const invoice = await this.invoiceRepository.findOne({ where: { idInvoice: id }, relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
-
-      if (!invoice) {
-        throw new HttpException('Invoice not found', HttpStatus.NOT_FOUND);
-      }
-      console.log('Invoice retrieved:', invoice);
-      return invoice;
-    } catch (error) {
-      console.error('Error retrieving invoice:', error);
-      throw new HttpException('Failed to retrieve invoice', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-  async findInvoiceByUser(userId: number): Promise<Invoice[]> {
-    try {
-      const invoices = await this.invoiceRepository.find({
-        where: { user: { idUser: userId } },
-        relations: ['user', 'invoiceDetails', 'invoiceDetails.product'],
-      });
-
-      if (!invoices.length) {
-        throw new HttpException('No invoices found for this user', HttpStatus.NOT_FOUND);
-      }
-
-      return invoices;
-    } catch (error) {
-      console.error('Error retrieving invoices:', error);
-      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-  
-  removeInvoice(_id: number): CreateInvoiceDto | PromiseLike<CreateInvoiceDto> {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
     @InjectRepository(InvoicesDetail)
     private readonly invoicesDetailsRepository: Repository<InvoicesDetail>,
     private readonly dataSource: DataSource,
-  ) {}
+  ) { }
 
   async createInvoice(userId: number, products: IProduct[]): Promise<CreateInvoiceDto> {
     const query: FindOneOptions<User> = { where: { idUser: userId } };
@@ -133,17 +83,59 @@ export class InvoiceService {
     }
   }
 
- 
-
-  findOne(id: number) {
-    return this.invoiceRepository.findOne({ where: { idInvoice: id }, relations: ['user', 'invoiceDetails'] });
+  async findAllInvoice(): Promise<Invoice[]> {
+    try {
+      console.log('Attempting to retrieve all invoices...');
+      const invoices = await this.invoiceRepository.find({ relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
+      console.log('Invoices retrieved:', invoices);
+      return invoices;
+    } catch (error) {
+      console.error('Error retrieving invoices:', error);
+      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  update(id: number, updateInvoiceDto: CreateInvoiceDto) {
-    return this.invoiceRepository.update(id, updateInvoiceDto);
+  async findOneInvoice(id: number): Promise<Invoice> {
+    try {
+      console.log('Attempting to retrieve invoice with ID:', id);
+      const invoice = await this.invoiceRepository.findOne({ where: { idInvoice: id }, relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
+
+      if (!invoice) {
+        throw new HttpException('Invoice not found', HttpStatus.NOT_FOUND);
+      }
+      console.log('Invoice retrieved:', invoice);
+      return invoice;
+    } catch (error) {
+      console.error('Error retrieving invoice:', error);
+      throw new HttpException('Failed to retrieve invoice', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  
+  async findInvoiceByUser(userId: number): Promise<Invoice[]> {
+    try {
+      const invoices = await this.invoiceRepository.find({
+        where: { user: { idUser: userId } },
+        relations: ['user', 'invoiceDetails', 'invoiceDetails.product'],
+      });
+
+      if (!invoices.length) {
+        throw new HttpException('No invoices found for this user', HttpStatus.NOT_FOUND);
+      }
+
+      return invoices;
+    } catch (error) {
+      console.error('Error retrieving invoices:', error);
+      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  remove(id: number) {
-    return this.invoiceRepository.delete(id);
+  async removeInvoice(id: number): Promise<Invoice> {
+    const query: FindOneOptions = { where: { idInvoice: id } }
+    const invoiceFound = await this.invoiceRepository.findOne(query)
+    if (!invoiceFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND, error: `no existe una factura con el id ${id} `
+    }, HttpStatus.NOT_FOUND)
+    const removeInvoice = await this.invoiceRepository.remove(invoiceFound)
+    return removeInvoice
   }
 }

@@ -4,8 +4,9 @@ import { Rol } from "src/helpers/enums-type.enum"
 
 
 export class CreateUserDto {
+    
+    idUser: number
 
-    idUser:number
     @IsString()
     @IsNotEmpty()
     @Expose()

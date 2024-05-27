@@ -30,8 +30,6 @@ export class Product {
     @Column({ type: 'varchar', length: 255 })
     images: string
 
-    invoiceDetails: any;
-
     @BeforeInsert()
     @BeforeUpdate()
     getNameForCodeProduct() {
@@ -40,6 +38,6 @@ export class Product {
     // @OneToMany(() => Invoice, invoice => invoice.product)
     // invoices: Invoice[];
     @OneToMany(() => InvoicesDetail, invoiceDetail => invoiceDetail.product)
-    public invoice_detail: InvoicesDetail[]
+    public invoiceDetails: InvoicesDetail[]
 
 }

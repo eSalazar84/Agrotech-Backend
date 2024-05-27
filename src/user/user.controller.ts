@@ -2,10 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, Validation
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateInvoiceDto } from 'src/invoice/dto/create-invoice.dto';
 import { IUser } from './interface/user.interface';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -42,14 +41,10 @@ export class UserController {
     return await this.userService.updateUser(id, updateUserDto);
   }
 
- // @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized access' })
   @Delete(':id')
   async remove(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<IUser> {
     return this.userService.removeUser(id);
   }
-
-
-  }
-

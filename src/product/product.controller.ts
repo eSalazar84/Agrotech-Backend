@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, ValidationPipe, UsePipes, Query, UseInterceptors, UploadedFile, BadRequestException, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, ValidationPipe, UsePipes, Query, UseInterceptors, UploadedFile, HttpException } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -70,7 +70,8 @@ export class ProductController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new HttpException({
-        status: HttpStatus.BAD_REQUEST, error: `No se proporcionó ningun archivo-`
+        status: HttpStatus.BAD_REQUEST, 
+        error: `No se proporcionó ningun archivo-`
       }, HttpStatus.BAD_REQUEST)
     }
 

@@ -1,10 +1,11 @@
 import { Expose } from 'class-transformer'
-import { IsString, IsNumber, IsEnum, IsNotEmpty, MaxLength, MinLength, Length } from 'class-validator'
+import { IsString, IsNumber, IsEnum, IsNotEmpty, MaxLength } from 'class-validator'
 import { Category } from 'src/helpers/enums-type.enum'
 
 export class CreateProductDto {
 
     idProduct: number
+
     @IsString()
     @IsNotEmpty()
     @Expose()
@@ -36,5 +37,4 @@ export class CreateProductDto {
     @Expose()
     @MaxLength(255)
     readonly images: string
-
 }

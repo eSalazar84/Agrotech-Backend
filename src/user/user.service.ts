@@ -4,15 +4,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { Invoice } from 'src/invoice/entities/invoice.entity';
-import { CreateInvoiceDto } from 'src/invoice/dto/create-invoice.dto';
 import * as bcrypt from 'bcrypt';
 import { IUser } from './interface/user.interface';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<CreateUserDto>,
-    @InjectRepository(Invoice) private readonly invoiceRepository: Repository<CreateInvoiceDto>) { }
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<CreateUserDto>
+  ) { }
 
   private async hashPassword(password: string): Promise<string> {
     const saltRounds = 10; // Número de rondas de hashing
@@ -22,24 +21,18 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<IUser> {
     const userFound = await this.userRepository.findOne({ where: { email: createUserDto.email } });
-
     if (userFound && userFound.active === false) {
-    console.log("usuarioApi", userFound);
-
       userFound.active = true;
       createUserDto.password = await this.hashPassword(createUserDto.password)
       await this.userRepository.save(userFound);
-      
       return userFound;
     }
-
     if (userFound && userFound.active === true) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: `NOT VALID`
       }, HttpStatus.BAD_REQUEST);
     }
-
     createUserDto.password = await this.hashPassword(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto);
     await this.userRepository.save(newUser)
@@ -60,7 +53,8 @@ export class UserService {
     const query: FindOneOptions = { where: { idUser: id }, relations: ['invoice'] }
     const userFound = await this.userRepository.findOne(query)
     if (!userFound || userFound.active === false) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe el usuario con el id ${id}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe el usuario con el id ${id}`
     }, HttpStatus.NOT_FOUND)
     const { password, ...rest } = userFound
     return rest
@@ -69,7 +63,8 @@ export class UserService {
   async findUserByEmail(email: string): Promise<CreateUserDto> {
     const userFound = await this.userRepository.findOneBy({ email })
     if (!userFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `Contraseña o Nombre de Usuario Incorrecto`
+      status: HttpStatus.NOT_FOUND,
+      error: `Contraseña o Nombre de Usuario Incorrecto`
     }, HttpStatus.NOT_FOUND)
     return userFound
   }
@@ -78,7 +73,8 @@ export class UserService {
     const queryFound: FindOneOptions = { where: { idUser: id } }
     const userFound = await this.userRepository.findOne(queryFound)
     if (!userFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe el usuario con el id ${id}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe el usuario con el id ${id}`
     }, HttpStatus.NOT_FOUND)
 
     const existingUserWithEmail = await this.userRepository.findOne({ where: { email: updateUserDto.email } })
@@ -88,10 +84,9 @@ export class UserService {
         error: `NOT VALID`
       }, HttpStatus.BAD_REQUEST);
     }
-    // Actualizar el usuario con los datos proporcionados
+    // vuelve a hashear el password para brindar seguridad
     updateUserDto.password = await this.hashPassword(updateUserDto.password)
     const updatedUser = Object.assign(userFound, updateUserDto);
-    // Guardar los cambios en la base de datos
     const savedUser = await this.userRepository.save(updatedUser);
     const { password, ...rest } = savedUser
     return rest
@@ -101,15 +96,11 @@ export class UserService {
     const query: FindOneOptions = { where: { idUser: id } }
     const userFound = await this.userRepository.findOne(query)
     if (!userFound || userFound.active === false) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `No existe el usuario con el id ${id}`
+      status: HttpStatus.NOT_FOUND,
+      error: `No existe el usuario con el id ${id}`
     }, HttpStatus.NOT_FOUND)
     userFound.active = false;
     const removeUser = await this.userRepository.save(userFound)
     const { password, ...rest } = removeUser
     return rest
   }
-
-  
-
- 
-}
