@@ -84,16 +84,49 @@ export class InvoiceService {
   }
 
   async findAllInvoice(): Promise<Invoice[]> {
-    return this.invoiceRepository.find({ relations: ['invoiceDetails', 'invoiceDetails.product'] })
+    try {
+      console.log('Attempting to retrieve all invoices...');
+      const invoices = await this.invoiceRepository.find({ relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
+      console.log('Invoices retrieved:', invoices);
+      return invoices;
+    } catch (error) {
+      console.error('Error retrieving invoices:', error);
+      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findOneInvoice(id: number): Promise<Invoice> {
-    const query: FindOneOptions = { where: { idInvoice: id }, relations: ['user', 'invoiceDetails'] }
-    const invoiceFound = await this.invoiceRepository.findOne(query)
-    if (!invoiceFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `no existe una factura con el id ${id} `
-    }, HttpStatus.NOT_FOUND)
-    return invoiceFound;
+    try {
+      console.log('Attempting to retrieve invoice with ID:', id);
+      const invoice = await this.invoiceRepository.findOne({ where: { idInvoice: id }, relations: ['user', 'invoiceDetails', 'invoiceDetails.product'] });
+
+      if (!invoice) {
+        throw new HttpException('Invoice not found', HttpStatus.NOT_FOUND);
+      }
+      console.log('Invoice retrieved:', invoice);
+      return invoice;
+    } catch (error) {
+      console.error('Error retrieving invoice:', error);
+      throw new HttpException('Failed to retrieve invoice', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  
+  async findInvoiceByUser(userId: number): Promise<Invoice[]> {
+    try {
+      const invoices = await this.invoiceRepository.find({
+        where: { user: { idUser: userId } },
+        relations: ['user', 'invoiceDetails', 'invoiceDetails.product'],
+      });
+
+      if (!invoices.length) {
+        throw new HttpException('No invoices found for this user', HttpStatus.NOT_FOUND);
+      }
+
+      return invoices;
+    } catch (error) {
+      console.error('Error retrieving invoices:', error);
+      throw new HttpException('Failed to retrieve invoices', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async removeInvoice(id: number): Promise<Invoice> {
