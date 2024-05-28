@@ -3,6 +3,7 @@ import { Category } from "../../helpers/enums-type.enum";
 import { InvoicesDetail } from "../../invoices_details/entities/invoices_detail.entity";
 import { getThreeWords } from "../../helpers/helpers";
 
+
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn()
@@ -34,7 +35,8 @@ export class Product {
     getNameForCodeProduct() {
         this.codeProduct = getThreeWords(this.category)
     }
-
+    // @OneToMany(() => Invoice, invoice => invoice.product)
+    // invoices: Invoice[];
     @OneToMany(() => InvoicesDetail, invoiceDetail => invoiceDetail.product)
     public invoiceDetails: InvoicesDetail[]
 

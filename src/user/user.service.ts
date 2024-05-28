@@ -104,4 +104,3 @@ export class UserService {
     const { password, ...rest } = removeUser
     return rest
   }
-}

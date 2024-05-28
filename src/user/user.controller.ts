@@ -48,4 +48,3 @@ export class UserController {
   async remove(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<IUser> {
     return this.userService.removeUser(id);
   }
-}
