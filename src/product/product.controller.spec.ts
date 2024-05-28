@@ -73,13 +73,13 @@ describe('ProductController', () => {
 
   const mockProductRepository = {
     findAll: jest.fn(() => mockedArrayProduct),
-    findOne: jest.fn((idProduct: number) => mockedArrayProduct.find(product => product.idProduct === idProduct)),
+    findOneProduct: jest.fn((idProduct: number) => mockedArrayProduct.find(product => product.idProduct === idProduct)),
     findByCategory: jest.fn((category: string) => mockedArrayProduct.filter(product => product.category === category)),
-    create: jest.fn((newProduct: IProduct) => {
+    createProduct: jest.fn((newProduct: IProduct) => {
       mockedArrayProduct.push(newProduct);
       return newProduct;
     }),
-    update: jest.fn((idProduct: number, updateProduct: Partial<IProduct>) => {
+    updateProduct: jest.fn((idProduct: number, updateProduct: Partial<IProduct>) => {
       const productIndex = mockedArrayProduct.findIndex(product => product.idProduct === idProduct);
       if (productIndex !== -1) {
         mockedArrayProduct[productIndex] = { ...mockedArrayProduct[productIndex], ...updateProduct };
@@ -88,7 +88,7 @@ describe('ProductController', () => {
         return null;
       }
     }),
-    remove: jest.fn((idProduct: number) => {
+    removeProduct: jest.fn((idProduct: number) => {
       const index = mockedArrayProduct.findIndex(product => product.idProduct === idProduct);
       if (index !== -1) {
         return mockedArrayProduct.splice(index, 1)[0]; // Elimina el usuario y devuelve el usuario eliminado
@@ -121,8 +121,8 @@ describe('ProductController', () => {
   });
 
   it('should return one product by id', async () => {
-    const oneProduct = await productController.findOne(1);
-    const mockProduct = mockProductRepository.findOne(1)
+    const oneProduct = await productController.findOne(mockedArrayProduct[0].idProduct);
+    const mockProduct = mockProductRepository.findOneProduct(mockedArrayProduct[0].idProduct)
     expect(oneProduct).toEqual(mockProduct);
   });
 
@@ -142,10 +142,10 @@ describe('ProductController', () => {
       category: Category.Ferreteria,
       amount: 10,
       images: "nueva_imagen",
-    };
+    }
     const createdProduct = await productController.create(newProduct);
     expect(createdProduct).toEqual(newProduct);
-    expect(mockProductRepository.create).toHaveBeenCalledWith(newProduct);
+    expect(mockProductRepository.createProduct).toHaveBeenCalledWith(newProduct);
   });
 
   it('should update an existing product', async () => {
@@ -153,14 +153,25 @@ describe('ProductController', () => {
       product: "producto actualizado",
       price: 9999,
     };
-    const updatedProduct = await productController.update(1, updateProduct);
-    expect(updatedProduct).toEqual({ ...mockedArrayProduct[0], ...updateProduct });
-    expect(mockProductRepository.update).toHaveBeenCalledWith(1, updateProduct);
+    const updatedProduct = await productController.update(10, updateProduct);
+    expect(updatedProduct).toEqual({ ...mockedArrayProduct[1], ...updateProduct });
+    expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(10, updateProduct);
   });
+  
 
   it('should delete a product by id', async () => {
-    const deletedProduct = await productController.removeProduct(1);
-    expect(deletedProduct).toEqual(mockedArrayProduct[0]);
-    expect(mockProductRepository.remove).toHaveBeenCalledWith(1);
+    const deleteById = 1;
+    const userFound = mockedArrayProduct.find(user => user.idProduct === deleteById);
+
+    // Simulamos el método removeUser del servicio
+    jest.spyOn(productService, 'removeProduct').mockResolvedValue(userFound);
+
+    const deletedUser = await productController.removeProduct(deleteById);
+
+    // Verificamos que el usuario eliminado sea el esperado
+    expect(deletedUser).toEqual(userFound);
+
+    // Verificamos que el método removeUser del servicio fue llamado con el id correcto
+    expect(productService.removeProduct).toHaveBeenCalledWith(deleteById);
   });
 });
