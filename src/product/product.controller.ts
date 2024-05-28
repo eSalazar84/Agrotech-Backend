@@ -28,7 +28,7 @@ export class ProductController {
     if (category) {
       return await this.productService.findByCategory(category)
     } else {
-      return await this.productService.findAllProduct()
+      return await this.productService.findAll()
     }
   }
 

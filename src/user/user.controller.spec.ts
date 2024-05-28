@@ -144,7 +144,7 @@ describe('UserController', () => {
     });
 
     it('should be return a update user', async () => {
-      const newUserData = {
+      const updateUserData = {
         "name": "Emiliano César",
         "lastname": "Salazar",
         "email": "salazaremiliano84@gmail.com",
@@ -156,13 +156,36 @@ describe('UserController', () => {
         "idUser": 8
       };
 
-      const userFound = mockUserService.findOneUser(newUserData.idUser)
+      const userFound = mockUserService.findOneUser(updateUserData.idUser)
       jest.spyOn(userService, 'updateUser').mockResolvedValue(userFound)
-      const updateUser = await userController.update(newUserData.idUser, newUserData)
+      const updateUser = await userController.update(updateUserData.idUser, updateUserData)
       expect(updateUser).toEqual(userFound)
-      //expect(userService.removeUser).toHaveBeenCalledWith(newUserData.idUser)
     })
 
-  })
+    it('should be create a new user', async () => {
+      const newUserData = {
+        "name": "Jorge Anibal",
+        "lastname": "Sardon",
+        "email": "jsardon@gmail.com",
+        "password": "abc123",
+        "rol": Rol.ADMIN,
+        "active": true,
+        "phone": "2494514469",
+        "birthDate": new Date("1987-05-13T13:54:00.000Z"),
+        "createdAt": new Date(),
+        "idUser":9
+      }
 
+      const mailFound = mockUserService.findUserByEmail(newUserData.email)
+      
+      if (mailFound) {
+        jest.spyOn(userService, 'createUser').mockResolvedValue(mailFound)
+        const createUser = await userController.create(newUserData)
+
+        expect(createUser).toBeDefined()
+      } else {        
+        expect(newUserData).toBeNull()
+      }
+    })
+  })
 });
