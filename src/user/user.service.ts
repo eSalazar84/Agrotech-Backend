@@ -13,7 +13,7 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<CreateUserDto>
   ) { }
 
-  private async hashPassword(password: string): Promise<string> {
+  async hashPassword(password: string): Promise<string> {
     const saltRounds = 10; // Número de rondas de hashing
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     return hashedPassword;

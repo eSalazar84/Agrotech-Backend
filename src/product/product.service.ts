@@ -25,7 +25,7 @@ export class ProductService {
     return this.productRepository.save(newUser)
   }
 
-  async findAllProduct(): Promise<CreateProductDto[]> {
+  async findAll(): Promise<CreateProductDto[]> {
     return this.productRepository.find({ relations: ['invoiceDetails'] });
   }
 
