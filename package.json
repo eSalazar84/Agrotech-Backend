@@ -82,7 +82,11 @@
       ".module.ts",
       ".dto.ts",
       ".entity.ts",
-      ".interface.ts"
+      ".interface.ts",
+      ".constants.ts",
+      ".guards.ts",
+      ".guard.ts",
+      ".helpers.ts"
     ],
     "testEnvironment": "node"
   }
