@@ -157,7 +157,7 @@ describe('ProductController', () => {
     expect(updatedProduct).toEqual({ ...mockedArrayProduct[1], ...updateProduct });
     expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(10, updateProduct);
   });
-  
+
 
   it('should delete a product by id', async () => {
     const deleteById = 1;
