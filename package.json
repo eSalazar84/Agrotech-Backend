@@ -79,14 +79,11 @@
     ],
     "coverageDirectory": "../coverage",
     "coveragePathIgnorePatterns": [
-      ".module.ts",
-      ".dto.ts",
-      ".entity.ts",
-      ".interface.ts",
-      ".constants.ts",
-      ".guards.ts",
-      ".guard.ts",
-      ".helpers.ts"
+      "/node_modules/",
+      "/*.module.ts",
+      "/dto/",
+      "/*.entity.ts",
+      "/*.interface.ts"
     ],
     "testEnvironment": "node"
   }

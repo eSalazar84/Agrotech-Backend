@@ -5,7 +5,7 @@ import { Product } from '../../product/entities/product.entity';
 @Entity()
 export class InvoicesDetail {
   @PrimaryGeneratedColumn()
-  id: number;
+  idDetails: number;
 
   @Column()
   amount_sold: number;
