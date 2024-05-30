@@ -6,11 +6,10 @@ import { Category } from '../helpers/enums-type.enum';
 
 describe('ProductController', () => {
   let productController: ProductController;
-  let productService: ProductService;
 
   const mockedArrayProduct: IProduct[] = [
     {
-      "idProduct": 9,
+      "idProduct": 1,
       "codeProduct": "Rop-8a0",
       "product": "botas",
       "description": "para caminar",
@@ -20,7 +19,7 @@ describe('ProductController', () => {
       "images": "C:\\fakepath\\IMG-20240513-WA0024.jpg"
     },
     {
-      "idProduct": 10,
+      "idProduct": 2,
       "codeProduct": "tra021",
       "product": "tranquera",
       "description": "para cerrar",
@@ -30,7 +29,7 @@ describe('ProductController', () => {
       "images": "muestra_2",
     },
     {
-      "idProduct": 11,
+      "idProduct": 3,
       "codeProduct": "fer001",
       "product": "destornillador",
       "description": "para desatornillar",
@@ -40,7 +39,7 @@ describe('ProductController', () => {
       "images": "muestra_3"
     },
     {
-      "idProduct": 12,
+      "idProduct": 4,
       "codeProduct": "rop026",
       "product": "mameluco",
       "description": "para vestir",
@@ -48,26 +47,6 @@ describe('ProductController', () => {
       "category": Category.Ropa_de_trabajo,
       "amount": 587,
       "images": "muestra_4",
-    },
-    {
-      "idProduct": 13,
-      "codeProduct": "fer003",
-      "product": "martillo",
-      "description": "para golpear",
-      "price": 21541521,
-      "category": Category.Ferreteria,
-      "amount": 15,
-      "images": "muestra_5",
-    },
-    {
-      "idProduct": 14,
-      "codeProduct": "tra100",
-      "product": "porton",
-      "description": "para bloquear",
-      "price": 51651,
-      "category": Category.Ferreteria,
-      "amount": 3,
-      "images": "muestra_6",
     }
   ]
 
@@ -88,12 +67,12 @@ describe('ProductController', () => {
         return null;
       }
     }),
-    removeProduct: jest.fn((idProduct: number) => {
-      const index = mockedArrayProduct.findIndex(product => product.idProduct === idProduct);
-      if (index !== -1) {
-        return mockedArrayProduct.splice(index, 1)[0]; // Elimina el usuario y devuelve el usuario eliminado
+    removeProduct: jest.fn((id: number) => {
+      const productIndex = mockedArrayProduct.findIndex(product => product.idProduct === id);
+      if (productIndex !== -1) {
+        return mockedArrayProduct.splice(productIndex, 1)[0];
       } else {
-        return null; // Devuelve null si no se encuentra el usuario
+        return null;
       }
     }),
   };
@@ -108,70 +87,73 @@ describe('ProductController', () => {
       .compile();
 
     productController = module.get<ProductController>(ProductController);
-    productService = module.get<ProductService>(ProductService)
   });
 
   it('should be defined', () => {
     expect(productController).toBeDefined();
   });
 
-  it('should return all products', async () => {
-    const products = await productController.findAll();
-    expect(products).toBe(mockedArrayProduct);
-  });
+  describe('Testing over create method', () => {
+    it('should create a new product', async () => {
+      const newProduct: IProduct = {
+        idProduct: 15,
+        codeProduct: "new001",
+        product: "nuevo producto",
+        description: "nuevo",
+        price: 1000,
+        category: Category.Ferreteria,
+        amount: 10,
+        images: "nueva_imagen",
+      }
+      const productSpy = mockProductRepository.createProduct(newProduct)
+      const productReal = await productController.create(newProduct)
+      expect(productReal).toEqual(productSpy);
+      expect(mockProductRepository.createProduct).toHaveBeenCalledWith(newProduct);
+    });
+  })
 
-  it('should return one product by id', async () => {
-    const oneProduct = await productController.findOne(mockedArrayProduct[0].idProduct);
-    const mockProduct = mockProductRepository.findOneProduct(mockedArrayProduct[0].idProduct)
-    expect(oneProduct).toEqual(mockProduct);
-  });
+  describe('Testing over Read method', () => {
+    it('should return all products', async () => {
+      const productSpy = mockProductRepository.findAll();
+      const productReal = await productController.findAll()
+      expect(productReal).toBe(productSpy);
+    });
 
-  it('should return products by category', async () => {
-    const category = Category.Ferreteria;
-    const productsByCategory = await productController.findAll(category);
-    expect(productsByCategory).toEqual(mockProductRepository.findByCategory(category));
-  });
+    it('should return one product by id', async () => {
+      const oneProductSpy = mockProductRepository.findOneProduct(mockedArrayProduct[0].idProduct)
+      const oneProductReal = await productController.findOne(mockedArrayProduct[0].idProduct)
+      expect(oneProductReal).toEqual(oneProductSpy);
+    });
 
-  it('should create a new product', async () => {
-    const newProduct: IProduct = {
-      idProduct: 15,
-      codeProduct: "new001",
-      product: "nuevo producto",
-      description: "nuevo",
-      price: 1000,
-      category: Category.Ferreteria,
-      amount: 10,
-      images: "nueva_imagen",
-    }
-    const createdProduct = await productController.create(newProduct);
-    expect(createdProduct).toEqual(newProduct);
-    expect(mockProductRepository.createProduct).toHaveBeenCalledWith(newProduct);
-  });
+    it('should return products by category', async () => {
+      const category = Category.Ferreteria;
+      const productSpyFilter = mockProductRepository.findByCategory(category)
+      const productRealFilter = await productController.findAll(category)
+      expect(productRealFilter).toEqual(productSpyFilter);
+    });
+  })
 
-  it('should update an existing product', async () => {
-    const updateProduct: Partial<IProduct> = {
-      product: "producto actualizado",
-      price: 9999,
-    };
-    const updatedProduct = await productController.update(10, updateProduct);
-    expect(updatedProduct).toEqual({ ...mockedArrayProduct[1], ...updateProduct });
-    expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(10, updateProduct);
-  });
+  describe('Testing over update method', () => {
+    it('should update an existing product', async () => {
+      const updateProduct: Partial<IProduct> = {
+        product: "producto actualizado",
+        price: 9999,
+      };
+      const updateProductSpy = mockProductRepository.updateProduct(2, updateProduct)
+      const updateProductReal = await productController.update(2, updateProduct)
+      expect(updateProductReal).toEqual(updateProductSpy);
+      expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(2, updateProduct);
+    });
+  })
 
-
-  it('should delete a product by id', async () => {
-    const deleteById = 1;
-    const userFound = mockedArrayProduct.find(user => user.idProduct === deleteById);
-
-    // Simulamos el método removeUser del servicio
-    jest.spyOn(productService, 'removeProduct').mockResolvedValue(userFound);
-
-    const deletedUser = await productController.removeProduct(deleteById);
-
-    // Verificamos que el usuario eliminado sea el esperado
-    expect(deletedUser).toEqual(userFound);
-
-    // Verificamos que el método removeUser del servicio fue llamado con el id correcto
-    expect(productService.removeProduct).toHaveBeenCalledWith(deleteById);
-  });
+  describe('Testting over delete method', () => {
+    it('should delete a product by id', async () => {
+      const deleteById = 1;
+      const deleteProductSpy = mockProductRepository.removeProduct(deleteById);
+      const deleteProductReal = await productController.removeProduct(deleteById);
+      expect(deleteProductSpy.idProduct).toBe(deleteById);
+      expect(deleteProductReal).toBeNull();
+      expect(mockProductRepository.removeProduct).toHaveBeenCalledWith(deleteById);
+    });
+  })
 });

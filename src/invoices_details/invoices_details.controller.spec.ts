@@ -71,15 +71,13 @@ describe('InvoicesDetailsController', () => {
     expect(detailsController).toBeDefined();
   });
 
-  describe('Testing over all Invoices Details', () => {
+  describe('Testing over read method', () => {
     it('should return all details', async () => {
       const detailsSpy = mockDetailsRepository.findAllDetailsInv_Det()
       const detailsReal = await detailsController.findAll()
       expect(detailsReal).toEqual(detailsSpy)
     })
-  })
 
-  describe('Testing over a invoice_details by id', () => {
     it('should return a one Details', async () => {
       const detailsSpy = mockDetailsRepository.findOneInv_Det(mockArrayDetails[1].id)
       const detailsReal = await detailsController.findOne(mockArrayDetails[1].id)
@@ -87,7 +85,7 @@ describe('InvoicesDetailsController', () => {
     })
   })
 
-  describe('Testing over update method', () => {
+  describe('Testing over patch method', () => {
     it('should return a updated Details', async () => {
       const detailsToUpdate = {
         id: 2,

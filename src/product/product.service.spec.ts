@@ -15,4 +15,10 @@ describe('ProductService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+  /* it('should be return a correct email', async () => {
+    const userEmail = 'fabricio@gmail.com';
+    const userEmailSpy = mockUserRepository.findUserByEmail(userEmail)
+    const userEmailReal = await userService.findUserByEmail(userEmail);
+    expect(userEmailReal).toEqual(userEmailSpy);
+  }); */
 });

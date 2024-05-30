@@ -4,7 +4,6 @@ import { InvoiceService } from './invoice.service';
 import { Invoice } from './entities/invoice.entity';
 import { Iinvoice } from './interface/invoice.entity';
 import { JwtService } from '@nestjs/jwt';
-import { CreateInvoiceDto } from './dto/create-invoice.dto';
 
 describe('InvoiceController', () => {
   let invoiceController: InvoiceController
@@ -63,36 +62,19 @@ describe('InvoiceController', () => {
     expect(invoiceController).toBeDefined();
   });
 
-  describe('Testing over all Invoices', () => {
+  describe('Testing over read method', () => {
     it('should be return all invoices', async () => {
       const invoiceSpy = mockInvoiceRepository.findAllInvoice()
       const invoiceReal = await invoiceController.findAll()
       expect(invoiceReal).toEqual(invoiceSpy);
     })
-  })
 
-  describe('Testing over a invoice_details by id', () => {
     it('should return a one Details', async () => {
       const invoiceSpy = mockInvoiceRepository.findOneInvoice(mockedArrayInvoice[1].idInvoice)
       const invoiceReal = await invoiceController.findOne(mockedArrayInvoice[1].idInvoice)
       expect(invoiceReal).toBe(invoiceSpy)
     })
   })
-
-  /* describe('Testing over update method', () => {
-    it('should return a updated Details', async () => {
-      const idUser = 2
-      const createInvoice: Invoice = {
-        "invoiceDate": new Date("2024-05-21T23:28:09.000Z"),
-        "total_without_iva": 21216,
-        "total_with_iva": 25671,
-      }
-      const invoiceSpy = mockInvoiceRepository.createInvoice(createInvoice)
-      const invoiceReal = await invoiceController.createInvoice(idUser, createInvoice)
-      expect(invoiceReal).toEqual(invoiceSpy)
-    }
-    )
-  }) */
 
   describe('Testing over delete method', () => {
     it('should return deleted invoice-detail', async () => {
