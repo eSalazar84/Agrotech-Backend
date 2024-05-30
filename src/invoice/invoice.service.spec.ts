@@ -68,4 +68,18 @@ describe('InvoiceService', () => {
     })
   })
 
+  describe('Testing over delete method', () => {
+    it('should be delete a one invoice', async () => {
+      const invoiceToDelete = {
+        "invoiceDate": new Date("2024-05-21T23:28:09.000Z"),
+        "total_without_iva": 21216,
+        "total_with_iva": 25671,
+        "idInvoice": 4
+      }
+      const deleteInvoiceSpy = mockInvoiceRepository.removeInvoice(invoiceToDelete.idInvoice)
+      const deleteInvoiceReal = await invoiceService.removeInvoice(invoiceToDelete.idInvoice)
+      expect(deleteInvoiceReal).toEqual(deleteInvoiceSpy);
+      expect(!deleteInvoiceReal).toBeTruthy()
+    })
+  })
 });
