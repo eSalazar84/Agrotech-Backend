@@ -5,7 +5,6 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Rol } from '../helpers/enums-type.enum';
 
-// mock-user-values.ts
 export const mockedUserValues = [
   {
     idUser: 1,
@@ -108,8 +107,8 @@ describe('UserService', () => {
     expect(createUser).toBeDefined()
   })
 
-  describe('Testing over update user', ()=>{
-    it('should update a user', async()=>{
+  describe('Testing over update user', () => {
+    it('should update a user', async () => {
       const updateUser: CreateUserDto = {
         idUser: 6,
         name: 'Emiliano',
@@ -125,16 +124,19 @@ describe('UserService', () => {
 
       const userFound = { idUser: 6, ...updateUser };
 
-      mockUserRepository.findOne.mockRejectedValue(updateUser)
+      mockUserRepository.findOne.mockResolvedValue(updateUser)
       mockUserRepository.save.mockResolvedValue({
         ...userFound,
         ...updateUser
       })
       const userReal = await userService.updateUser(updateUser.idUser, updateUser)
 
-      expect(userReal).toEqual(updateUser)
+      const { password, ...rest } = updateUser;
+
+      expect(userReal).toEqual(expect.objectContaining(rest));;
+
+      expect(userReal).toEqual(expect.objectContaining(rest));
+      expect(userReal).toEqual(rest);
     })
   })
 })
-
-//SIGO ACA

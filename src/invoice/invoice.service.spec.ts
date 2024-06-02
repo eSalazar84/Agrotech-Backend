@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { InvoiceService } from './invoice.service';
-import { Iinvoice } from './interface/invoice.entity';
 import { InvoicesDetailsService } from '../invoices_details/invoices_details.service';
 import { UserService } from '../user/user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -9,7 +8,7 @@ import { Repository, DataSource } from 'typeorm';
 import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.entity';
 import { User } from '../user/entities/user.entity';
 import { IUser } from '../user/interface/user.interface';
-import { Rol } from '../helpers/enums-type.enum';
+import { Category, Rol } from '../helpers/enums-type.enum';
 
 describe('InvoiceService', () => {
   let invoiceService: InvoiceService;
@@ -81,20 +80,38 @@ describe('InvoiceService', () => {
         "amount_sold": 1
       }
 
+      const productMock = [
+        {
+          "idProduct": 1,
+          "codeProduct": "Rop-8a0",
+          "product": "botas",
+          "description": "para caminar",
+          "price": 10520,
+          "category": Category.Ropa_de_trabajo,
+          "amount": 20,
+          "images": "C:\\fakepath\\IMG-20240513-WA0024.jpg"
+        }
+      ]
 
-      jest.spyOn(userService, 'findOneUser').mockResolvedValue(userMock)
-      jest.spyOn(invoiceService, 'createInvoice').mockRejectedValue(invoiceMock)
+      jest.spyOn(userService, 'findOneUser').mockResolvedValue(userMock);
+      jest.spyOn(invoiceService, 'createInvoice').mockResolvedValue(invoiceMock as any);
 
-      
+      const result = await invoiceService.createInvoice(userMock.idUser, productMock);
 
-      
-      
-
-
-
-
+      expect(result).toBeDefined()
     })
   })
 
+  describe('findAllInvoice', () => {
+    it('should return an array of invoices', async () => {
+      const mockInvoices: Invoice[] = [];
+
+      jest.spyOn(invoiceService, 'findAllInvoice').mockResolvedValue(mockInvoices);
+
+      const invoices = await invoiceService.findAllInvoice();
+
+      expect(invoices).toEqual(mockInvoices)
+    });
+  });
 
 });

@@ -28,7 +28,7 @@ describe('AuthService', () => {
         {
           provide: UserService,
           useValue: {
-            findUserByEmail: jest.fn(), // Mockea los métodos utilizados en AuthService
+            findUserByEmail: jest.fn(),
           },
         },
       ],

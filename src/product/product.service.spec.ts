@@ -48,13 +48,13 @@ describe('ProductService', () => {
       };
       const createdProduct = { id: 1, ...productDto };
 
-      mockProductRepository.create.mockReturnValue(createdProduct);  // Mock de `create`
+      mockProductRepository.create.mockReturnValue(createdProduct); 
       mockProductRepository.save.mockResolvedValue(createdProduct);
 
       const result = await productService.createProduct(productDto);
 
       expect(result).toEqual(createdProduct);
-      expect(mockProductRepository.create).toHaveBeenCalledWith(productDto);  // Verificación de `create`
+      expect(mockProductRepository.create).toHaveBeenCalledWith(productDto); 
       expect(mockProductRepository.save).toHaveBeenCalledWith(createdProduct);
     });
   })
