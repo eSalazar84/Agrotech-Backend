@@ -5,7 +5,6 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Rol } from '../helpers/enums-type.enum';
 
-// mock-user-values.ts
 export const mockedUserValues = [
   {
     idUser: 1,
@@ -85,17 +84,7 @@ describe('UserService', () => {
 
     const deletedUser = await userService.removeUser(userIdToDelete);
 
-    expect(deletedUser).toEqual({
-      idUser: mockedUserValues[0].idUser,
-      name: mockedUserValues[0].name,
-      lastname: mockedUserValues[0].lastname,
-      email: mockedUserValues[0].email,
-      phone: mockedUserValues[0].phone,
-      birthDate: mockedUserValues[0].birthDate,
-      createdAt: mockedUserValues[0].createdAt,
-      active: false,
-      rol: mockedUserValues[0].rol,
-    });
+    expect(deletedUser).toEqual(mockUserToDelete);
     expect(mockUserRepository.save).toHaveBeenCalledWith(mockUserToDelete);
   });
 
@@ -118,5 +107,36 @@ describe('UserService', () => {
     expect(createUser).toBeDefined()
   })
 
-  
+  describe('Testing over update user', () => {
+    it('should update a user', async () => {
+      const updateUser: CreateUserDto = {
+        idUser: 6,
+        name: 'Emiliano',
+        lastname: 'Salazar',
+        email: 'esalazar@gmail.com',
+        phone: '2281514468',
+        password: 'abc123',
+        birthDate: new Date('1984-05-13T13:54:00.000Z'),
+        createdAt: new Date('2024-03-18T13:54:00.000Z'),
+        active: true,
+        rol: Rol.USER,
+      };
+
+      const userFound = { idUser: 6, ...updateUser };
+
+      mockUserRepository.findOne.mockResolvedValue(updateUser)
+      mockUserRepository.save.mockResolvedValue({
+        ...userFound,
+        ...updateUser
+      })
+      const userReal = await userService.updateUser(updateUser.idUser, updateUser)
+
+      const { password, ...rest } = updateUser;
+
+      expect(userReal).toEqual(expect.objectContaining(rest));;
+
+      expect(userReal).toEqual(expect.objectContaining(rest));
+      expect(userReal).toEqual(rest);
+    })
+  })
 })

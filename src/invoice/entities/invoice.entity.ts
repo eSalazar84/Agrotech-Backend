@@ -34,14 +34,5 @@ export class Invoice {
         this.calculateTotalWithIva()
     }
 
-    public getIdInvoice(): number { return this.idInvoice }
-    public getInvoiceDate(): Date { return this.invoiceDate }
-    public getTotalWithoutIva(): number { return this.total_without_iva }
-    public getTotalWithIva(): number { return this.total_with_iva }
-
-    public setInvoiceDate(invoiceDate: Date): Date { return this.invoiceDate = invoiceDate }
-    public setTotalWithoutIva(total_without_iva: number): number { return this.total_without_iva = total_without_iva }
-    public setTotalWithIva(total_with_iva: number): number { return this.total_with_iva = total_with_iva }
-
 }
 

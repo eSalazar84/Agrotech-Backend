@@ -12,7 +12,7 @@ export class AuthService {
         private readonly jwtService: JwtService
     ) { }
 
-    private async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
+    async comparePasswords(plainPassword: string, hashedPassword: string): Promise<boolean> {
         const match = await bcrypt.compare(plainPassword, hashedPassword);
         return match;
     }

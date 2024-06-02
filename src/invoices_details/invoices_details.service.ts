@@ -12,11 +12,11 @@ export class InvoicesDetailsService {
   ) { }
 
   async findAllDetailsInv_Det(): Promise<CreateInvoicesDetailDto[]> {
-    return this.invoicesDetailsRepository.find({ relations: ['id_invoice', 'id_product'] });
+    return this.invoicesDetailsRepository.find({ relations: ['invoice', 'product'] });
   }
 
   async findOneInv_Det(id: number): Promise<CreateInvoicesDetailDto> {
-    const query: FindOneOptions = { where: { idInvoicesDetails: id }, relations: ['id_invoice', 'id_product'] }
+    const query: FindOneOptions = { where: { idDetails: id }, relations: ['invoice', 'product'] }
     const detailsFound = await this.invoicesDetailsRepository.findOne(query)
     if (!detailsFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
@@ -26,7 +26,7 @@ export class InvoicesDetailsService {
   }
 
   async updateInv_Det(id: number, updateInvoicesDetailDto: UpdateInvoicesDetailDto): Promise<CreateInvoicesDetailDto> {
-    const query: FindOneOptions = { where: { idInvoicesDetails: id } }
+    const query: FindOneOptions = { where: { idDetails: id } }
     const detailsFound = await this.invoicesDetailsRepository.findOne(query)
     if (!detailsFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: `No existe el detalle de factura n°${id}`
@@ -40,7 +40,7 @@ export class InvoicesDetailsService {
   }
 
   async removeInv_Det(id: number): Promise<CreateInvoicesDetailDto> {
-    const query: FindOneOptions = { where: { idInvoicesDetails: id } }
+    const query: FindOneOptions = { where: { idDetails: id } }
     const detailsFound = await this.invoicesDetailsRepository.findOne(query)
     if (!detailsFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
