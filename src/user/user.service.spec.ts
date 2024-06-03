@@ -36,7 +36,7 @@ const mockUserRepository = {
   find: jest.fn().mockResolvedValue(mockedUserValues),
   findOne: jest.fn(),
   save: jest.fn(),
-  remove: jest.fn().mockResolvedValue(mockedUserValues[0]), // Mock del método remove
+  remove: jest.fn().mockResolvedValue(mockedUserValues[0]), 
 };
 
 describe('UserService', () => {

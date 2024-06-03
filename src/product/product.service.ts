@@ -93,7 +93,7 @@ export class ProductService {
             if (!this.isValidProduct(row)) {
               console.error('Registro no válido:', row);
               errorCount++;
-              return; // Saltar al siguiente registro
+              return; 
             }
 
             products.push(

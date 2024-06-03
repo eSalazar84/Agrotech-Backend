@@ -7,6 +7,7 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { InvoicesDetailsModule } from './invoices_details/invoices_details.module';
 import { AuthModule } from './auth/auth.module';
 import { DATABASE_NAME, DB_TYPE, HOST, PORT, USER_DB_NAME, USER_DB_PASSWORD } from 'config';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -20,7 +21,7 @@ import { DATABASE_NAME, DB_TYPE, HOST, PORT, USER_DB_NAME, USER_DB_PASSWORD } fr
       join(__dirname, '/**/*.entity{.js,.ts}')
     ],
     synchronize: true
-  }), UserModule, ProductModule, InvoiceModule, InvoicesDetailsModule, AuthModule],
+  }), UserModule, ProductModule, InvoiceModule, InvoicesDetailsModule, AuthModule, EmailModule],
   controllers: [],
   providers: [],
 })

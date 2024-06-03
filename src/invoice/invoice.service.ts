@@ -71,7 +71,7 @@ export class InvoiceService {
         invoiceDate: finalInvoice.invoiceDate,
         total_without_iva: finalInvoice.total_without_iva,
         total_with_iva: finalInvoice.total_with_iva,
-        id_user: userFound.idUser,  // Usa la propiedad correcta aquí
+        id_user: userFound.idUser,
       };
 
       return invoiceDto;

@@ -17,3 +17,7 @@ export enum Category {
     Forestacion_jardineria = 'Forestación y Jardinería',
     Agricultura_de_precisicion = 'Agricultura de precision'
 }
+
+export enum Templates {
+    WELCOME = 'welcome'
+}
