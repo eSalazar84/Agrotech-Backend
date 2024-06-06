@@ -8,9 +8,13 @@ import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.ent
 import { Product } from '../product/entities/product.entity';
 import { InvoicesDetailsService } from '../invoices_details/invoices_details.service';
 import { UserService } from '../user/user.service';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Invoice, User, InvoicesDetail, Product])],
+  imports: [
+    TypeOrmModule.forFeature([Invoice, User, InvoicesDetail, Product]),
+    EmailModule
+  ],
   controllers: [InvoiceController],
   providers: [InvoiceService, InvoicesDetailsService, UserService],
   exports: [InvoiceService]

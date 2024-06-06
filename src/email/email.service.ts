@@ -1,15 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
-import { Email } from './providers/email';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class EmailService {
   constructor(
-    private readonly emailProvider: Email
+    private readonly emailService: MailerService
   ) { }
 
-  async sendEmail(emailBody: CreateEmailDto) {
+  async sendWelcomeEmail(email:string){
+    await this.emailService.sendMail({
+      to: email,
+      subject: 'Confirma tu cuenta',
+      template: './welcome',
+      context: {
+        loginUrl: 'http://localhost:5173/login'
+      }
+    })
+  }
+
+  
+  /* async sendEmail(emailBody: CreateEmailDto) {
     const { from, subjectEmail, sendTo } = emailBody
     const html = this.getTemplate(emailBody)
     await this.emailProvider.sendEmail(from, subjectEmail, sendTo, html)
@@ -42,5 +54,5 @@ export class EmailService {
 
   remove(id: number) {
     return `This action removes a #${id} email`;
-  }
+  } */
 }

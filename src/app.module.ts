@@ -8,6 +8,9 @@ import { InvoicesDetailsModule } from './invoices_details/invoices_details.modul
 import { AuthModule } from './auth/auth.module';
 import { DATABASE_NAME, DB_TYPE, HOST, PORT, USER_DB_NAME, USER_DB_PASSWORD } from 'config';
 import { EmailModule } from './email/email.module';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
   imports: [TypeOrmModule.forRoot({

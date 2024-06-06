@@ -4,9 +4,13 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Invoice } from '../invoice/entities/invoice.entity';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Invoice])],
+  imports: [
+    TypeOrmModule.forFeature([User, Invoice]),
+    EmailModule
+  ],
   controllers: [UserController],
   providers: [UserService],
   //Export hace que sea visible userService a los demas modulos,

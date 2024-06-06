@@ -7,7 +7,8 @@ import { UpdateEmailDto } from './dto/update-email.dto';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  @HttpCode(HttpStatus.OK)
+  
+  /* @HttpCode(HttpStatus.OK)
   @Post('send-email')
   async sendEmail(@Body() createEmailDto: CreateEmailDto) {
     return await this.emailService.sendEmail(createEmailDto);
@@ -31,5 +32,5 @@ export class EmailController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.emailService.remove(+id);
-  }
+  } */
 }
