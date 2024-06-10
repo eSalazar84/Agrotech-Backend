@@ -28,7 +28,8 @@ export class AuthService {
                 email: userFound.email,
                 name: userFound.name,
                 rol: userFound.rol,
-                id: userFound.idUser
+                id: userFound.idUser,
+                active: userFound.active
             }
         }
 
