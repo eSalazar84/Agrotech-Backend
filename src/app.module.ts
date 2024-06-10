@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { DATABASE_NAME, DB_TYPE, HOST, PORT, USER_DB_NAME, USER_DB_PASSWORD } from 'config';
 import { EmailModule } from './email/email.module';
 import { CloudinaryProvider } from './cloudinary/cloudinary.config';
+import { MailModule } from './mail/mail.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { CloudinaryProvider } from './cloudinary/cloudinary.config';
     InvoicesDetailsModule,
     AuthModule,
     EmailModule,
+    MailModule,
   ],
   controllers: [],
   providers: [CloudinaryProvider],
