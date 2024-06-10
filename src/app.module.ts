@@ -8,24 +8,31 @@ import { InvoicesDetailsModule } from './invoices_details/invoices_details.modul
 import { AuthModule } from './auth/auth.module';
 import { DATABASE_NAME, DB_TYPE, HOST, PORT, USER_DB_NAME, USER_DB_PASSWORD } from 'config';
 import { EmailModule } from './email/email.module';
-import * as dotenv from 'dotenv';
+import { CloudinaryProvider } from './cloudinary/cloudinary.config';
 
-dotenv.config();
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: DB_TYPE,
-    host: HOST,
-    port: PORT,
-    username: USER_DB_NAME,
-    password: USER_DB_PASSWORD,
-    database: DATABASE_NAME,
-    entities: [
-      join(__dirname, '/**/*.entity{.js,.ts}')
-    ],
-    synchronize: true
-  }), UserModule, ProductModule, InvoiceModule, InvoicesDetailsModule, AuthModule, EmailModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: DB_TYPE,
+      host: HOST,
+      port: PORT,
+      username: USER_DB_NAME,
+      password: USER_DB_PASSWORD,
+      database: DATABASE_NAME,
+      entities: [
+        join(__dirname, '/**/*.entity{.js,.ts}')
+      ],
+      synchronize: true
+    }),
+    UserModule,
+    ProductModule,
+    InvoiceModule,
+    InvoicesDetailsModule,
+    AuthModule,
+    EmailModule,
+  ],
   controllers: [],
-  providers: [],
+  providers: [CloudinaryProvider],
 })
 export class AppModule { }

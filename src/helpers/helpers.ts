@@ -15,7 +15,7 @@ export const renameFile = (req, file, cb) => {
 
 export const fileFilter = (req, file, cb) => {
     // el if comprueba si la extension es .csv, de no serlo entra
-    if (!file.originalname.match(/\.csv$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|csv)$/i)) {
 
         return cb(new HttpException({
             status: HttpStatus.BAD_REQUEST,
