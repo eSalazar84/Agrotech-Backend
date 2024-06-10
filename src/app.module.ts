@@ -30,7 +30,7 @@ import { MailModule } from './mail/mail.module';
     InvoiceModule,
     InvoicesDetailsModule,
     AuthModule,
-    MailModule,
+    MailModule
   ],
   controllers: [],
   providers: [CloudinaryProvider],
