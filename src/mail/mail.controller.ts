@@ -1,12 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
 import { MailService } from './mail.service';
 
-@Controller('mail')
+@Controller()
 export class MailController {
-    constructor(private readonly mailService: MailService) { }
+  constructor(private readonly mailService: MailService) {}
 
-    @Get()
-    async sendEmail() {
-        return await this.mailService.sendMail();
-    }
+  @Get('send-email')
+  async sendEmail() {
+    await this.mailService.sendMail(
+      'recipient@example.com', // Cambia esto por el email del destinatario
+      'Welcome!',
+      'welcome',
+      { name: 'John Doe' },
+    );
+    return 'Email sent successfully';
+  }
 }
