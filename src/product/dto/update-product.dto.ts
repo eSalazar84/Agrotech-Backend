@@ -1,37 +1,38 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateProductDto } from './create-product.dto';
 import { Expose } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
 import { Category } from '../../helpers/enums-type.enum';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
     @IsString()
     @IsNotEmpty()
     @Expose()
-    readonly product?: string
+    @MaxLength(45)
+    readonly product?: string;
 
     @IsString()
     @IsNotEmpty()
     @Expose()
-    readonly description?: string
+    @MaxLength(255)
+    readonly description?: string;
 
     @IsNumber()
     @IsNotEmpty()
     @Expose()
-    readonly price?: number
+    readonly price?: number;
 
     @IsEnum(Category)
     @IsNotEmpty()
     @Expose()
-    readonly category?: Category
+    readonly category?: Category;
 
     @IsNumber()
     @IsNotEmpty()
     @Expose()
-    amount?: number
+    amount?: number;
 
     @IsOptional()
     @IsString()
-    //@Matches(/\.(jpg|jpeg|png|gif)$/i, { message: 'Image must be a valid image format (jpg, jpeg, png, gif)' })
-    images?: string
+    images?: string;
 }

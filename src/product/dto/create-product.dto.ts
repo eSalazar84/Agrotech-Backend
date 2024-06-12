@@ -3,8 +3,8 @@ import { IsString, IsNumber, IsEnum, IsNotEmpty, MaxLength, IsOptional } from 'c
 import { Category } from '../../helpers/enums-type.enum'
 
 export class CreateProductDto {
-
-    idProduct: number
+    /* @IsOptional()
+    idProduct: number */
 
     @IsString()
     @IsNotEmpty()

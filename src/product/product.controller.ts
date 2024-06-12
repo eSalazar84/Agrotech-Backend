@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, ValidationPipe, UsePipes, Query, UseInterceptors, UploadedFile, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, ValidationPipe, UsePipes, Query, UseInterceptors, UploadedFile, HttpException, ParseFloatPipe } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -27,7 +27,11 @@ export class ProductController {
     fileFilter: fileFilter
   }))
   async create(
-    @Body() createProductDto: CreateProductDto,
+    @Body('product') product: string,
+    @Body('description') description: string,
+    @Body('price', ParseFloatPipe) price: number,
+    @Body('category') category: Category,
+    @Body('amount', ParseIntPipe) amount: number,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateProductDto> {
     if (!file) {
@@ -46,7 +50,14 @@ export class ProductController {
       });
 
       // Combina las imágenes cargadas con otros datos del DTO
-      createProductDto.images = result.secure_url;
+      const createProductDto: CreateProductDto = {
+        product,
+        description,
+        price,
+        category,
+        amount,
+        images: result.secure_url
+      };
 
       // Llama a la función de creación de producto del servicio
       return await this.productService.createProduct(createProductDto);
@@ -89,7 +100,11 @@ export class ProductController {
   async update(
     @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number,
     @UploadedFile() file: Express.Multer.File,
-    @Body() updateProductDto: UpdateProductDto,
+    @Body('product') product: string,
+    @Body('description') description: string,
+    @Body('price', ParseFloatPipe) price: number,
+    @Body('category') category: Category,
+    @Body('amount', ParseIntPipe) amount: number,
   ): Promise<UpdateProductDto> {
     let images: string | undefined;
 
@@ -112,10 +127,14 @@ export class ProductController {
       }
     }
 
-    // Combinar 'images' cargadas con otros datos del DTO
-    if (images) {
-      updateProductDto.images = images;
-    }
+    const updateProductDto: UpdateProductDto = {
+      product,
+      description,
+      price,
+      category,
+      amount,
+      images,
+    };
 
     // Llamar a la función de actualización de producto
     return await this.productService.updateProduct(id, updateProductDto);
@@ -144,7 +163,7 @@ export class ProductController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new HttpException({
-        status: HttpStatus.BAD_REQUEST, 
+        status: HttpStatus.BAD_REQUEST,
         error: `No se proporcionó ningun archivo-`
       }, HttpStatus.BAD_REQUEST)
     }
