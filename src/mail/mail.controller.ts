@@ -6,7 +6,7 @@ export class MailController {
   constructor(private readonly mailService: MailService) { }
 
   @Get('send-email')
-  async sendEmail() {
+  /* async sendEmail() {
     await this.mailService.sendMail(
       'fabricio.cbe@gmail.com', // Cambia esto por el email del destinatario
       'Bienvendid@ a Agrotech!',
@@ -17,9 +17,9 @@ export class MailController {
       }
     );
     return 'Email sent successfully';
-  }
+  } */
 
-  /* @Post('send-email')
+  @Post('send-email')
   async sendEmail(
     @Body('to') to: string,
     @Body('subject') subject: string,
@@ -28,5 +28,5 @@ export class MailController {
   ) {
     await this.mailService.sendMail(to, subject, template, context);
     return 'Email sent successfully';
-  } */
+  } 
 }

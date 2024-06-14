@@ -14,7 +14,7 @@ export class User {
     private lastname: string
 
     @Column({ type: 'varchar', nullable: false, unique: true, length: 45 })
-    private email: string
+    email: string
 
     @Column({ type: 'varchar', length: 60, nullable: false })
     private password: string

@@ -39,7 +39,15 @@ export class UserService {
     createUserDto.password = await this.hashPassword(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto);
     await this.userRepository.save(newUser)
-    // await this.emailService.sendMail()
+    await this.emailService.sendMail(
+      createUserDto.email,
+      'Bienvenid@!',
+      'welcome',
+      {
+        name: createUserDto.name,
+        loginUrl: 'http://localhost:5174/login'
+      }
+    )
     const { password, ...rest } = newUser
     return rest;
   }

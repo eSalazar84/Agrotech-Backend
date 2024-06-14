@@ -7,6 +7,8 @@ import { User } from '../user/entities/user.entity';
 import { Product } from '../product/entities/product.entity';
 import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.entity';
 import { IProduct } from '../product/interface/product.interface';
+import { MailService } from 'src/mail/mail.service';
+
 
 @Injectable()
 export class InvoiceService {
@@ -18,6 +20,7 @@ export class InvoiceService {
     @InjectRepository(InvoicesDetail)
     private readonly invoicesDetailsRepository: Repository<InvoicesDetail>,
     private readonly dataSource: DataSource,
+    private readonly mailService: MailService
   ) { }
 
   async createInvoice(userId: number, products: IProduct[]): Promise<CreateInvoiceDto> {
@@ -63,18 +66,21 @@ export class InvoiceService {
 
       savedInvoice.total_without_iva = totalWithoutIva;
       savedInvoice.total_with_iva = totalWithoutIva * 1.21;
+
+
       const finalInvoice = await queryRunner.manager.save(savedInvoice);
 
       await queryRunner.commitTransaction();
 
-      const invoiceDto: CreateInvoiceDto = {
+      // Envío del correo electrónico
+      await this.mailService.sendPurchaseConfirmationEmail(userFound.email, finalInvoice, products);
+
+      return {
         invoiceDate: finalInvoice.invoiceDate,
         total_without_iva: finalInvoice.total_without_iva,
         total_with_iva: finalInvoice.total_with_iva,
         id_user: userFound.idUser,
       };
-
-      return invoiceDto;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -119,4 +125,6 @@ export class InvoiceService {
     const removeInvoice = await this.invoiceRepository.remove(invoiceFound)
     return removeInvoice
   }
+
+
 }
