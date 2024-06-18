@@ -6,4 +6,5 @@ export interface IAccess_token {
     name: string,
     rol: Rol,
     id: number
+    active: boolean
 }

@@ -6,11 +6,14 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { IUser } from './interface/user.interface';
+import { MailService } from 'src/mail/mail.service';
+
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<CreateUserDto>
+    @InjectRepository(User) private readonly userRepository: Repository<CreateUserDto>,
+    private readonly emailService: MailService
   ) { }
 
   async hashPassword(password: string): Promise<string> {
@@ -36,6 +39,15 @@ export class UserService {
     createUserDto.password = await this.hashPassword(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto);
     await this.userRepository.save(newUser)
+    await this.emailService.sendMail(
+      createUserDto.email,
+      'Bienvenid@!',
+      'welcome',
+      {
+        name: createUserDto.name,
+        loginUrl: 'http://localhost:5174/login'
+      }
+    )
     const { password, ...rest } = newUser
     return rest;
   }
