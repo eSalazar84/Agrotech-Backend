@@ -4,6 +4,9 @@ import { Invoice } from 'src/invoice/entities/invoice.entity';
 import { EMAIL_USER } from 'config';
 import { IProduct } from 'src/product/interface/product.interface';
 
+console.log(`EMAIL_USER: ${process.env.EMAIL_USER}`); // Debug
+
+
 @Injectable()
 export class MailService {
   constructor(private readonly mailerService: MailerService) { }
@@ -60,15 +63,26 @@ export class MailService {
       from: email,
       to: EMAIL_USER, // Email del administrador
       subject: `Formulario de contacto motivo: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      html: `
+          <p>Motivo de contacto: ${subject}</p>
+          <p>Nombre: ${name}</p>
+          <p>Email: ${email}</p>
+          <p>Mensaje: ${message}</p>
+        `,
     };
 
     // Email de confirmación al usuario
     const userMailOptions = {
       from: EMAIL_USER,
-      to: email,
+      to: email, // Email del usuario
       subject: 'Confirmación de recepción de mensaje',
-      text: `Hola ${name},\n\nHemos recibido tu mensaje con el asunto: "${subject}".\n\nNos pondremos en contacto contigo lo antes posible.\n\nGracias,\nEl equipo de Soporte de Agrotech`,
+      html: `
+      <p>Hola ${name}!</p>
+      <p>Hemos recibido tu mensaje con el asunto: "${subject}".</p>
+      <p>Nos pondremos en contacto contigo lo antes posible.</p>
+      <p>Gracias,</p>
+      <p>El equipo de Soporte de Agrotech</p>
+      `
     };
 
     // Enviar ambos correos electrónicos
