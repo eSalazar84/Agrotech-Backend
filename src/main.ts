@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 
 
 async function bootstrap() {
-  dotenv.config({ path: '.env.local' });
+  dotenv.config();
   
   const app = await NestFactory.create(AppModule);
   app.enableCors();

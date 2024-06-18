@@ -28,5 +28,16 @@ export class MailController {
   ) {
     await this.mailService.sendMail(to, subject, template, context);
     return 'Email sent successfully';
-  } 
+  }
+
+  @Post('contact')
+  async sendContactForm(
+    @Body('name') name: string,
+    @Body('email') email: string,
+    @Body('subject') subject: string,
+    @Body('message') message: string,
+  ) {
+    await this.mailService.sendContactMail(name, email, subject, message);
+    return { message: 'Message sent successfully' };
+  }
 }

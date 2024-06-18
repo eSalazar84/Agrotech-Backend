@@ -18,14 +18,14 @@ import { EMAIL_SERVICE, EMAIL_USER, EMAIL_PASSWORD } from 'config';
       },
       defaults: {
         from: `"Agrotech" <${EMAIL_USER}>`,
-      },
+      }/* ,
       template: {
         dir: path.join(__dirname, '../../../src/mail/templates'),
         adapter: new HandlebarsAdapter(), // Utiliza Handlebars como adaptador
         options: {
           strict: true,
         },
-      },
+      }, */
     }),
   ],
   providers: [MailService],

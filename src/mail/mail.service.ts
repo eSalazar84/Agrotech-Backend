@@ -27,7 +27,7 @@ export class MailService {
         <hr>
       `).join('');
       console.log(productsHtml);
-      
+
 
       const mailOptions = await this.mailerService.sendMail({
         from: `"Agrotech" <${EMAIL_USER}>`,
@@ -52,5 +52,27 @@ export class MailService {
       console.error('Error al enviar el correo electrónico:', error);
       throw new HttpException('Error al enviar el correo electrónico', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async sendContactMail(name: string, email: string, subject: string, message: string) {
+    // Email al administrador
+    const adminMailOptions = {
+      from: email,
+      to: EMAIL_USER, // Email del administrador
+      subject: `Formulario de contacto motivo: ${subject}`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+    };
+
+    // Email de confirmación al usuario
+    const userMailOptions = {
+      from: EMAIL_USER,
+      to: email,
+      subject: 'Confirmación de recepción de mensaje',
+      text: `Hola ${name},\n\nHemos recibido tu mensaje con el asunto: "${subject}".\n\nNos pondremos en contacto contigo lo antes posible.\n\nGracias,\nEl equipo de Soporte de Agrotech`,
+    };
+
+    // Enviar ambos correos electrónicos
+    await this.mailerService.sendMail(adminMailOptions);
+    await this.mailerService.sendMail(userMailOptions);
   }
 }

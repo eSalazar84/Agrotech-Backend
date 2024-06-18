@@ -4,7 +4,7 @@ import { Category } from '../../helpers/enums-type.enum'
 
 export class CreateProductDto {
     /* @IsOptional()
-    idProduct: number */
+    idProduct: number  */
 
     @IsString()
     @IsNotEmpty()

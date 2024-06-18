@@ -93,7 +93,7 @@ export class ProductService {
             if (!this.isValidProduct(row)) {
               console.error('Registro no válido:', row);
               errorCount++;
-              return; 
+              return;
             }
 
             products.push(
@@ -152,4 +152,18 @@ export class ProductService {
     }
     return true;
   }
+
+  async getProductsByAmount(amount:number) {
+    amount = 5;
+
+    const products = await this.findAll()
+    const findLowAmount = products.filter(product => product.amount <= amount);
+
+
+    console.log(findLowAmount.length);
+
+
+    return findLowAmount
+  }
+
 }

@@ -9,6 +9,7 @@ import { fileFilter, renameFile } from '../helpers/helpers';
 import { ApiBadRequestResponse, ApiBody, ApiConflictResponse, ApiConsumes, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { v2 as cloudinary } from 'cloudinary';
 import * as path from 'path';
+import * as fs from 'fs';
 
 @ApiTags('products')
 @Controller('product')
@@ -58,8 +59,8 @@ export class ProductController {
         amount,
         images: result.secure_url
       };
+      fs.unlinkSync(uploadPath);
 
-      // Llama a la función de creación de producto del servicio
       return await this.productService.createProduct(createProductDto);
     } catch (err) {
       throw new HttpException(
@@ -119,6 +120,7 @@ export class ProductController {
         });
 
         images = result.secure_url;
+        fs.unlinkSync(uploadPath);
       } catch (err) {
         throw new HttpException(
           { status: HttpStatus.BAD_REQUEST, error: 'Failed to upload image' },
@@ -136,7 +138,6 @@ export class ProductController {
       images,
     };
 
-    // Llamar a la función de actualización de producto
     return await this.productService.updateProduct(id, updateProductDto);
   }
 
@@ -169,5 +170,12 @@ export class ProductController {
     }
 
     return await this.productService.uploadProductsFromCsv(file)
+  }
+
+  //NO ANDA
+  @Get('filter')
+  getFilteredProducts() {
+    const amount= 5
+    return this.productService.getProductsByAmount(amount);
   }
 }
