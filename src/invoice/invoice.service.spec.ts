@@ -66,6 +66,7 @@ describe('InvoiceService', () => {
         createdAt: new Date('2024-03-18T13:54:00.000Z'),
         active: true,
         rol: Rol.USER,
+        address: "calle falsa 123"
       }
 
       const invoiceMock = {

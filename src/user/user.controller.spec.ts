@@ -18,7 +18,8 @@ describe('UserController', () => {
       "phone": "2281513051",
       "birthDate": new Date("1984-05-13T13:54:00.000Z"),
       "createdAt": new Date("2024-03-18T13:54:00.000Z"),
-      "idUser": 1
+      "idUser": 1,
+      "address": "Avda. Libertad 200"
     },
     {
       "name": "Fabricio",
@@ -29,7 +30,8 @@ describe('UserController', () => {
       "phone": "2281529854",
       "birthDate": new Date("1984-05-13T13:54:0)0.000Z"),
       "createdAt": new Date("2024-03-18T13:54:00.000Z"),
-      "idUser": 2
+      "idUser": 2,
+      "address": "San Martin 358"
     },
     {
       "name": "Emi",
@@ -40,7 +42,8 @@ describe('UserController', () => {
       "phone": "2281513051",
       "birthDate": new Date("1984-05-13T13:54:00.000Z"),
       "createdAt": new Date("2024-03-18T13:54:00.000Z"),
-      "idUser": 3
+      "idUser": 3,
+      "address": "La Rioja 265"
     }
   ]
 
@@ -101,7 +104,8 @@ describe('UserController', () => {
           "phone": "2494514469",
           "birthDate": new Date("1987-05-13T13:54:00.000Z"),
           "createdAt": new Date(),
-          "idUser": 4
+          "idUser": 4,
+          "address": "Calle false 123"
         }
         const newUserSpy = mockUserRepository.createUser(newUserData);
         const newUserReal = await userController.create(newUserData)
@@ -145,7 +149,8 @@ describe('UserController', () => {
           "phone": "2281514469",
           "birthDate": new Date("1984-05-13T13:54:00.000Z"),
           "createdAt": new Date("2024-03-18T13:54:00.000Z"),
-          "idUser": 3
+          "idUser": 3,
+          "address": "calle falsa 123"
         };
 
         const updateUserSpy = mockUserRepository.updateUser(updateUserData.idUser, updateUserData)
@@ -165,7 +170,8 @@ describe('UserController', () => {
         "phone": "2494514469",
         "birthDate": new Date("1987-05-13T13:54:00.000Z"),
         "createdAt": new Date(),
-        "idUser": 9
+        "idUser": 9,
+        "address": "calle falsa 123"
       }
 
       const mailFound = mockUserRepository.findUserByEmail(newUserData.email)

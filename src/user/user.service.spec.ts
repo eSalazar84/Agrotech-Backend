@@ -100,6 +100,7 @@ describe('UserService', () => {
       createdAt: new Date('2024-03-18T13:54:00.000Z'),
       active: true,
       rol: Rol.USER,
+      address: "La Rioja 265"
     };
 
     mockUserRepository.create.mockResolvedValue(newUser)
@@ -120,6 +121,7 @@ describe('UserService', () => {
         createdAt: new Date('2024-03-18T13:54:00.000Z'),
         active: true,
         rol: Rol.USER,
+        address: "La Rioja 265"
       };
 
       const userFound = { idUser: 6, ...updateUser };

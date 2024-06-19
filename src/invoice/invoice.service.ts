@@ -7,7 +7,7 @@ import { User } from '../user/entities/user.entity';
 import { Product } from '../product/entities/product.entity';
 import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.entity';
 import { IProduct } from '../product/interface/product.interface';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 
 
 @Injectable()

@@ -34,6 +34,9 @@ export class User {
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     private createdAt: Date
 
+    @Column({ type: 'varchar' })
+    address: string
+
     @OneToMany(() => Invoice, invoice => invoice.user)
     public invoice: Invoice[]
 

@@ -3,6 +3,7 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { IProduct } from './interface/product.interface';
 import { Category } from '../helpers/enums-type.enum';
+import { Readable } from 'stream';
 
 describe('ProductController', () => {
   let productController: ProductController;
@@ -95,6 +96,20 @@ describe('ProductController', () => {
 
   describe('Testing over create method', () => {
     it('should create a new product', async () => {
+      const mockFile = {
+        fieldname: 'file',
+        originalname: 'test.png',
+        encoding: '7bit',
+        mimetype: 'image/png',
+        size: 1024,
+        destination: '/uploads',
+        filename: 'test.png',
+        path: '/uploads/test.png',
+        buffer: Buffer.from('mock buffer data'),
+        stream: Readable.from(Buffer.from('mock buffer data'))
+      };
+      
+      module.exports = mockFile;
       const newProduct: IProduct = {
         idProduct: 15,
         codeProduct: "new001",
@@ -103,10 +118,17 @@ describe('ProductController', () => {
         price: 1000,
         category: Category.Ferreteria,
         amount: 10,
-        images: "nueva_imagen",
+        images: mockFile.originalname
       }
       const productSpy = mockProductRepository.createProduct(newProduct)
-      const productReal = await productController.create(newProduct)
+      const productReal = await productController.create(
+        newProduct.product,
+        newProduct.description,
+        newProduct.price,
+        newProduct.category,
+        newProduct.amount,
+        mockFile
+      )
       expect(productReal).toEqual(productSpy);
       expect(mockProductRepository.createProduct).toHaveBeenCalledWith(newProduct);
     });
@@ -135,12 +157,41 @@ describe('ProductController', () => {
 
   describe('Testing over update method', () => {
     it('should update an existing product', async () => {
-      const updateProduct: Partial<IProduct> = {
-        product: "producto actualizado",
-        price: 9999,
+      const mockFile = {
+        fieldname: 'file',
+        originalname: 'test.png',
+        encoding: '7bit',
+        mimetype: 'image/png',
+        size: 1024,
+        destination: '/uploads',
+        filename: 'test.png',
+        path: '/uploads/test.png',
+        buffer: Buffer.from('mock buffer data'),
+        stream: Readable.from(Buffer.from('mock buffer data'))
       };
+      
+      module.exports = mockFile;
+      const updateProduct: Partial<IProduct> = {
+        idProduct: 15,
+        codeProduct: "new001",
+        product: "nuevo producto",
+        description: "nuevo",
+        price: 1000,
+        category: Category.Ferreteria,
+        amount: 10,
+        images: mockFile.originalname
+      }
       const updateProductSpy = mockProductRepository.updateProduct(2, updateProduct)
-      const updateProductReal = await productController.update(2, updateProduct)
+      const updateProductReal = await productController.update(
+        updateProduct.idProduct,
+        updateProduct.product,
+        updateProduct.description,
+        updateProduct.price,
+        updateProduct.category,
+        updateProduct.amount,
+        mockFile
+      
+      )
       expect(updateProductReal).toEqual(updateProductSpy);
       expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(2, updateProduct);
     });

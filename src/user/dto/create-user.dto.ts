@@ -48,4 +48,8 @@ export class CreateUserDto {
     readonly birthDate: Date
 
     readonly createdAt: Date
+
+    @IsString()
+    @IsNotEmpty()
+    address: string
 }

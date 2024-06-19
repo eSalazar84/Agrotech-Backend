@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Invoice } from 'src/invoice/entities/invoice.entity';
 import { EMAIL_USER } from 'config';
-import { IProduct } from 'src/product/interface/product.interface';
+import { IProduct } from '../product/interface/product.interface';
 
 console.log(`EMAIL_USER: ${process.env.EMAIL_USER}`); // Debug
 

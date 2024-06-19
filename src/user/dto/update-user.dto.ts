@@ -46,4 +46,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     readonly birthDate?: Date
 
     readonly createdAt?: Date
+    
+    @IsString()
+    @IsNotEmpty()
+    address: string
 }
