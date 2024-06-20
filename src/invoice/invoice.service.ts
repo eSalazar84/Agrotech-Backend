@@ -42,6 +42,9 @@ export class InvoiceService {
       const savedInvoice = await queryRunner.manager.save(invoice);
       let totalWithoutIva = 0;
 
+      // Lista para almacenar los detalles de los productos vendidos
+      const soldProductsDetails = [];
+
       for (const item of products) {
         const queryProduct: FindOneOptions<Product> = { where: { idProduct: item.idProduct } };
         const productFound = await queryRunner.manager.findOne(Product, queryProduct);
@@ -62,18 +65,24 @@ export class InvoiceService {
         await queryRunner.manager.save(productFound);
 
         totalWithoutIva += productFound.price * item.amount;
+
+        // Añadir detalles del producto vendido a la lista
+        soldProductsDetails.push({
+          product: productFound.product,
+          price: productFound.price,
+          amount: item.amount
+        });
       }
 
       savedInvoice.total_without_iva = totalWithoutIva;
       savedInvoice.total_with_iva = totalWithoutIva * 1.21;
 
-
       const finalInvoice = await queryRunner.manager.save(savedInvoice);
 
       await queryRunner.commitTransaction();
 
-      // Envío del correo electrónico
-      await this.mailService.sendPurchaseConfirmationEmail(userFound.email, finalInvoice, products);
+      // Envío del correo electrónico con los detalles de los productos vendidos
+      await this.mailService.sendPurchaseConfirmationEmail(userFound.email, finalInvoice, soldProductsDetails);
 
       return {
         invoiceDate: finalInvoice.invoiceDate,

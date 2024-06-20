@@ -20,33 +20,30 @@ export class MailService {
     });
   }
 
-  async sendPurchaseConfirmationEmail(to: string, invoice: Invoice, products: IProduct[]): Promise<void> {
+  async sendPurchaseConfirmationEmail(to: string, invoice: Invoice, products: Partial<IProduct>[]): Promise<void> {
     try {
       const productsHtml = products.map(product => `
-        <p>Producto: ${product.product}</p>
-        <p>Precio: ${product.price}</p>
-        <p>Cantidad: ${product.amount}</p>
-        <p>total: ${product.price * product.amount}</p>
-        <hr>
-      `).join('');
-      console.log(productsHtml);
-
+            <p>Producto: ${product.product}</p>
+            <p>Precio: ${product.price}</p>
+            <p>Cantidad: ${product.amount}</p>
+            <p>Total: ${product.price * product.amount}</p>
+            <hr>
+        `).join('');
 
       const mailOptions = await this.mailerService.sendMail({
         from: `"Agrotech" <${EMAIL_USER}>`,
         to,
         subject: 'Confirmación de compra',
         html: `
-          <p>Hola ${to},</p>
-          <p>Gracias por tu compra. Aquí están los detalles de tu factura:</p>
-          <p>Productos comprados: </p>
-          <p>Fecha de la factura: ${invoice.invoiceDate}</p>
-          <p>Total sin IVA: ${invoice.total_without_iva}</p>
-          <p>Total con IVA: ${invoice.total_with_iva}</p>
-          <h3>Productos Comprados:</h3>
-          ${productsHtml}
-          <p>¡Esperamos verte pronto de nuevo!</p>
-        `,
+                <p>Hola ${to},</p>
+                <p>Gracias por tu compra. Aquí están los detalles de tu factura:</p>
+                <p>Fecha de la factura: ${invoice.invoiceDate}</p>
+                <p>Total sin IVA: ${invoice.total_without_iva}</p>
+                <p>Total con IVA: ${invoice.total_with_iva}</p>
+                <h3>Productos Comprados:</h3>
+                ${productsHtml}
+                <p>¡Esperamos verte pronto de nuevo!</p>
+            `,
       });
 
       console.log('Correo electrónico enviado correctamente');
@@ -73,7 +70,7 @@ export class MailService {
 
     // Email de confirmación al usuario
     const userMailOptions = {
-      from: EMAIL_USER,
+      from: `"Agrotech" <${EMAIL_USER}>`,
       to: email, // Email del usuario
       subject: 'Confirmación de recepción de mensaje',
       html: `
