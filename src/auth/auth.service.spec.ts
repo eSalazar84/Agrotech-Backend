@@ -70,7 +70,8 @@ describe('AuthService', () => {
         name: 'Test User',
         rol: Rol.USER,
         id: 123,
-        active: true
+        active: true,
+        address: 'La Rioja 265'
       };
 
       jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(mockUser);

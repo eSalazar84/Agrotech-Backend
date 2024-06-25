@@ -6,7 +6,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { IUser } from './interface/user.interface';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 
 
 @Injectable()

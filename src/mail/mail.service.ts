@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { Invoice } from '../invoice/entities/invoice.entity';
 import { EMAIL_USER } from 'config';
 import { IProduct } from '../product/interface/product.interface';
 

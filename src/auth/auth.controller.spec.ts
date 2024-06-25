@@ -47,7 +47,9 @@ describe('AuthController', () => {
         email: 'test@gmail.com',
         name: 'Test User',
         rol: Rol.USER,
-        id: 123
+        id: 123,
+        active: true,
+        address: 'La Rioja 265'
       };
 
       const mockLoginAnsPass = {

@@ -189,8 +189,7 @@ describe('ProductController', () => {
         updateProduct.price,
         updateProduct.category,
         updateProduct.amount,
-        mockFile
-      
+        mockFile.stream   
       )
       expect(updateProductReal).toEqual(updateProductSpy);
       expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(2, updateProduct);
