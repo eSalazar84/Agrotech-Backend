@@ -125,15 +125,52 @@ export class InvoiceService {
     return invoices;
   }
 
-  async removeInvoice(id: number): Promise<Invoice> {
-    const query: FindOneOptions = { where: { idInvoice: id } }
-    const invoiceFound = await this.invoiceRepository.findOne(query)
-    if (!invoiceFound) throw new HttpException({
-      status: HttpStatus.NOT_FOUND, error: `no existe una factura con el id ${id} `
-    }, HttpStatus.NOT_FOUND)
-    const removeInvoice = await this.invoiceRepository.remove(invoiceFound)
-    return removeInvoice
+  async removeInvoice(invoiceId: number): Promise<{ message: string, statusCode: number }> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      // Encontrar la factura y los detalles de la factura
+      const invoice = await queryRunner.manager.findOne(Invoice, {
+        where: { idInvoice: invoiceId },
+        relations: ['invoiceDetails', 'invoiceDetails.product']
+      });
+
+      if (!invoice) {
+        throw new HttpException('Invoice not found', HttpStatus.NOT_FOUND);
+      }
+
+      // Restablecer las cantidades de los productos
+      for (const detail of invoice.invoiceDetails) {
+        if (detail.product) {
+          const product = await queryRunner.manager.findOne(Product, { where: { idProduct: detail.product.idProduct } });
+
+          if (product) {
+            product.amount += detail.amount_sold;
+            await queryRunner.manager.save(product);
+          }
+        }
+      }
+
+      // Eliminar los detalles de la factura
+      await queryRunner.manager.delete(InvoicesDetail, { invoice: { idInvoice: invoiceId } });
+
+      // Eliminar la factura
+      await queryRunner.manager.delete(Invoice, { idInvoice: invoiceId });
+
+      await queryRunner.commitTransaction();
+
+      return { statusCode: HttpStatus.OK, message: 'Invoice deleted successfully' };
+      
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    } finally {
+      await queryRunner.release();
+    }
   }
+
 
 
 }

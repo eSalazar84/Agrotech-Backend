@@ -50,7 +50,7 @@ export class InvoiceController {
   @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiNotFoundResponse({ description: 'Invoice not found' })
-  async remove(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<Invoice> {
+  async remove(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<{ message: string, statusCode: number }> {
     return await this.invoiceService.removeInvoice(id);
   }
 }
