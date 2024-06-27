@@ -61,7 +61,8 @@ export class ProductService {
       status: HttpStatus.NOT_FOUND,
       error: `No existe un producto con el id ${id}`
     }, HttpStatus.NOT_FOUND)
-    const removeUser = await this.productRepository.remove(productFound)
+    productFound.active = false;
+    const removeUser = await this.productRepository.save(productFound)
     return removeUser
   }
 
@@ -153,7 +154,7 @@ export class ProductService {
     return true;
   }
 
-  async getProductsByAmount(amount:number) {
+  async getProductsByAmount(amount: number) {
     amount = 5;
 
     const products = await this.findAll()
