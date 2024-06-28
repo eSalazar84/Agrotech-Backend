@@ -4,8 +4,6 @@ import { Invoice } from '../invoice/entities/invoice.entity';
 import { EMAIL_USER } from 'config';
 import { IProduct } from '../product/interface/product.interface';
 
-console.log(`EMAIL_USER: ${process.env.EMAIL_USER}`); // Debug
-
 
 @Injectable()
 export class MailService {

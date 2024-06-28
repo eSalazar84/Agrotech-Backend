@@ -26,7 +26,9 @@ export class ProductService {
   }
 
   async findAll(): Promise<CreateProductDto[]> {
-    return this.productRepository.find({ relations: ['invoiceDetails'] });
+    const products = await this.productRepository.find({ relations: ['invoiceDetails'] });
+    const activeProducts = products.filter((products) => products.active === true)
+    return activeProducts
   }
 
   async findOneProduct(id: number): Promise<CreateProductDto> {
