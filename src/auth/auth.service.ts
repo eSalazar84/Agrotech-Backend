@@ -29,7 +29,8 @@ export class AuthService {
                 name: userFound.name,
                 rol: userFound.rol,
                 id: userFound.idUser,
-                active: userFound.active
+                active: userFound.active,
+                address: userFound.address
             }
         }
 

@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateProductDto } from './create-product.dto';
 import { Expose } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
 import { Category } from '../../helpers/enums-type.enum';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
@@ -35,4 +35,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     @IsOptional()
     @IsString()
     images?: string;
+
+    @IsBoolean()
+    active?: boolean
 }

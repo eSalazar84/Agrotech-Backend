@@ -8,8 +8,6 @@ export const renameFile = (req, file, cb) => {
         .map(() => Math.round(Math.random() * 16).toString(16))
         .join('')
 
-    console.log(`${randomName}-${fileName}`);
-
     cb(null, `${randomName}-${fileName}`);
 }
 

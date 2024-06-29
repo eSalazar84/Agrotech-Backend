@@ -60,7 +60,8 @@ describe('AuthService', () => {
         active: true,
         createdAt: new Date(),
         phone: '02281458596',
-        birthDate: new Date('1984-09-20')
+        birthDate: new Date('1984-09-20'),
+        address: "La Rioja 265"
       };
 
       const mockAccessToken: IAccess_token = {
@@ -69,6 +70,8 @@ describe('AuthService', () => {
         name: 'Test User',
         rol: Rol.USER,
         id: 123,
+        active: true,
+        address: 'La Rioja 265'
       };
 
       jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(mockUser);
@@ -95,7 +98,8 @@ describe('AuthService', () => {
         active: false,
         createdAt: new Date(),
         phone: '02281458596',
-        birthDate: new Date('1984-09-20')
+        birthDate: new Date('1984-09-20'),
+        address: "calle falsa 123"
       };
 
       jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(mockUser);

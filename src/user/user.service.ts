@@ -6,7 +6,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { IUser } from './interface/user.interface';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 
 
 @Injectable()
@@ -83,26 +83,33 @@ export class UserService {
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<IUser> {
     const queryFound: FindOneOptions = { where: { idUser: id } }
-    const userFound = await this.userRepository.findOne(queryFound)
+    const userFound = await this.userRepository.findOne(queryFound);
     if (!userFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: `No existe el usuario con el id ${id}`
-    }, HttpStatus.NOT_FOUND)
+    }, HttpStatus.NOT_FOUND);
 
-    const existingUserWithEmail = await this.userRepository.findOne({ where: { email: updateUserDto.email } })
+    const existingUserWithEmail = await this.userRepository.findOne({ where: { email: updateUserDto.email } });
     if (existingUserWithEmail && existingUserWithEmail.idUser !== userFound.idUser) {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,
         error: `NOT VALID`
       }, HttpStatus.BAD_REQUEST);
     }
-    // vuelve a hashear el password para brindar seguridad
-    updateUserDto.password = await this.hashPassword(updateUserDto.password)
+
+    // Solo hashear la contraseña si se proporciona en la solicitud
+    if (updateUserDto.password) {
+        updateUserDto.password = await this.hashPassword(updateUserDto.password);
+    } else {
+        // No actualizar la contraseña
+        delete updateUserDto.password;
+    }
+
     const updatedUser = Object.assign(userFound, updateUserDto);
     const savedUser = await this.userRepository.save(updatedUser);
-    const { password, ...rest } = savedUser
-    return rest
-  }
+    const { password, ...rest } = savedUser;
+    return rest;
+}
 
   async removeUser(id: number): Promise<IUser> {
     const query: FindOneOptions = { where: { idUser: id } }

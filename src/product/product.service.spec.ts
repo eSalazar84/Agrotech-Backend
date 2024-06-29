@@ -44,18 +44,19 @@ describe('ProductService', () => {
         description: 'test de product',
         amount: 5,
         product: 'test on products',
-        images: 'fake images'
+        images: 'fake images',
+        active: true
       };
-      const createdProduct = { id: 1, ...productDto };
+      //const createdProduct = { id: 1, ...productDto };
 
-      mockProductRepository.create.mockReturnValue(createdProduct); 
-      mockProductRepository.save.mockResolvedValue(createdProduct);
+      mockProductRepository.create.mockReturnValue(productDto);
+      mockProductRepository.save.mockResolvedValue(productDto);
 
       const result = await productService.createProduct(productDto);
 
-      expect(result).toEqual(createdProduct);
-      expect(mockProductRepository.create).toHaveBeenCalledWith(productDto); 
-      expect(mockProductRepository.save).toHaveBeenCalledWith(createdProduct);
+      expect(result).toEqual(productDto);
+      expect(mockProductRepository.create).toHaveBeenCalledWith(productDto);
+      expect(mockProductRepository.save).toHaveBeenCalledWith(productDto);
     });
   })
 
@@ -92,13 +93,17 @@ describe('ProductService', () => {
         description: 'test de product',
         amount: 5,
         product: 'test on products',
-        images: 'fake images'
+        images: 'fake images',
+        active: true
       }];
+
+      // Ajustamos el mock para que devuelva el array de productos
       mockProductRepository.find.mockResolvedValue(products);
 
       const result = await productService.findAll();
 
-      expect(result).toEqual(products);
+      // Esperamos solo los productos activos
+      expect(result).toEqual(products.filter(product => product.active));
       expect(mockProductRepository.find).toHaveBeenCalled();
     });
 
@@ -110,7 +115,8 @@ describe('ProductService', () => {
         description: 'test de product',
         amount: 5,
         product: 'test on products',
-        images: 'fake images'
+        images: 'fake images',
+        active: true
       };
       mockProductRepository.findOne.mockResolvedValue(productDto);
 
@@ -130,17 +136,20 @@ describe('ProductService', () => {
         description: 'test de product',
         amount: 5,
         product: 'test on products',
-        images: 'fake images'
+        images: 'fake images',
+        active: true
       };
       mockProductRepository.findOne.mockResolvedValue(productDto);
-      mockProductRepository.remove.mockResolvedValue(productDto);
-  
+
+      productDto.active = false;
+      mockProductRepository.save.mockResolvedValue(productDto);
+
       const result = await productService.removeProduct(productDto.idProduct);
-  
+
       expect(result).toEqual(productDto);
     });
   })
 
-  
+
 
 });

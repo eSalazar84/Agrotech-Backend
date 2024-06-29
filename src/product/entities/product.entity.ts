@@ -30,6 +30,9 @@ export class Product {
     @Column({ type: 'varchar', length: 255 })
     images: string
 
+    @Column({ type: 'boolean', default: true })
+    active: boolean
+
     @BeforeInsert()
     @BeforeUpdate()
     getNameForCodeProduct() {

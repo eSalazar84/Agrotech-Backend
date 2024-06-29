@@ -8,7 +8,7 @@ import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.ent
 import { Product } from '../product/entities/product.entity';
 import { InvoicesDetailsService } from '../invoices_details/invoices_details.service';
 import { UserService } from '../user/user.service';
-import { MailModule } from 'src/mail/mail.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [

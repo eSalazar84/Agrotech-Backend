@@ -33,6 +33,7 @@ export class ProductController {
     @Body('price', ParseFloatPipe) price: number,
     @Body('category') category: Category,
     @Body('amount', ParseIntPipe) amount: number,
+    @Body('active') active:boolean,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateProductDto> {
     if (!file) {
@@ -57,6 +58,7 @@ export class ProductController {
         price,
         category,
         amount,
+        active,
         images: result.secure_url
       };
       fs.unlinkSync(uploadPath);
@@ -98,6 +100,7 @@ export class ProductController {
     }),
     fileFilter: fileFilter
   }))
+
   async update(
     @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number,
     @UploadedFile() file: Express.Multer.File,
@@ -170,12 +173,5 @@ export class ProductController {
     }
 
     return await this.productService.uploadProductsFromCsv(file)
-  }
-
-  //NO ANDA
-  @Get('filter')
-  getFilteredProducts() {
-    const amount= 5
-    return this.productService.getProductsByAmount(amount);
   }
 }

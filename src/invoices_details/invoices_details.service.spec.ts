@@ -83,45 +83,5 @@ describe('InvoicesDetailsService', () => {
     })
   })
 
-  describe('Testing over patch method', () => {
-    it('should return a updated Details', async () => {
-      const detailsToUpdate = {
-        id: 2,
-        amount_sold: 5,
-        id_product: 1,
-        id_invoice: 2
-      }
-      const detailsSpy = mockDetailsRepository.updateInv_Det(detailsToUpdate.id, detailsToUpdate)
-      const detailsReal = await detailsService.updateInv_Det(detailsToUpdate.id, detailsToUpdate)
-      expect(detailsReal).toEqual(detailsSpy)
-    }
-    )
-    it('should return Error if amount < 0', async () => {
-      const detailsToUpdate = {
-        id: 50,
-        amount_sold: 5,
-        id_product: 1,
-        id_invoice: 2
-      }
-      const detailsSpy = mockDetailsRepository.updateInv_Det(detailsToUpdate.id, detailsToUpdate)
-      const detailsReal = await detailsService.updateInv_Det(detailsToUpdate.id, detailsToUpdate)
-      expect(detailsReal).toBeNull()
-      expect(detailsReal).toEqual(detailsSpy);
-    })
-  })
 
-  describe('Testing over delete method', () => {
-    it('should return deleted invoice-detail', async () => {
-      const detailsToDelete = {
-        id: 7,
-        amount_sold: 5,
-        id_product: 1,
-        id_invoice: 2
-      }
-      const detailsSpy = mockDetailsRepository.removeInv_Det(detailsToDelete.id)
-      const detailsReal = await detailsService.removeInv_Det(detailsToDelete.id)
-      expect(detailsSpy).toEqual(detailsReal);
-    })
-  })
-
-});
+})

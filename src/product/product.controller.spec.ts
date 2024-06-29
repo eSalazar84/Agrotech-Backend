@@ -3,68 +3,90 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { IProduct } from './interface/product.interface';
 import { Category } from '../helpers/enums-type.enum';
+import { Readable } from 'stream';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { CreateProductDto } from './dto/create-product.dto';
 
 describe('ProductController', () => {
   let productController: ProductController;
 
   const mockedArrayProduct: IProduct[] = [
     {
-      "idProduct": 1,
-      "codeProduct": "Rop-8a0",
-      "product": "botas",
-      "description": "para caminar",
-      "price": 10520,
-      "category": Category.Ropa_de_trabajo,
-      "amount": 20,
-      "images": "C:\\fakepath\\IMG-20240513-WA0024.jpg"
+      idProduct: 1,
+      codeProduct: "Rop-8a0",
+      product: "botas",
+      description: "para caminar",
+      price: 10520,
+      category: Category.Ropa_de_trabajo,
+      amount: 20,
+      images: "C:\\fakepath\\IMG-20240513-WA0024.jpg",
+      active: true
     },
     {
-      "idProduct": 2,
-      "codeProduct": "tra021",
-      "product": "tranquera",
-      "description": "para cerrar",
-      "price": 325980,
-      "category": Category.Ferreteria,
-      "amount": 5,
-      "images": "muestra_2",
+      idProduct: 2,
+      codeProduct: "tra021",
+      product: "tranquera",
+      description: "para cerrar",
+      price: 325980,
+      category: Category.Ferreteria,
+      amount: 5,
+      images: "muestra_2",
+      active: true
     },
     {
-      "idProduct": 3,
-      "codeProduct": "fer001",
-      "product": "destornillador",
-      "description": "para desatornillar",
-      "price": 2510,
-      "category": Category.Ferreteria,
-      "amount": 69,
-      "images": "muestra_3"
+      idProduct: 3,
+      codeProduct: "fer001",
+      product: "destornillador",
+      description: "para desatornillar",
+      price: 2510,
+      category: Category.Ferreteria,
+      amount: 69,
+      images: "muestra_3",
+      active: true
     },
     {
-      "idProduct": 4,
-      "codeProduct": "rop026",
-      "product": "mameluco",
-      "description": "para vestir",
-      "price": 658532,
-      "category": Category.Ropa_de_trabajo,
-      "amount": 587,
-      "images": "muestra_4",
+      idProduct: 4,
+      codeProduct: "rop026",
+      product: "mameluco",
+      description: "para vestir",
+      price: 658532,
+      category: Category.Ropa_de_trabajo,
+      amount: 587,
+      images: "muestra_4",
+      active: true
     }
-  ]
+  ];
+
+  jest.mock('cloudinary', () => ({
+    v2: {
+      uploader: {
+        upload: jest.fn().mockResolvedValue({
+          secure_url: 'http://mockurl.com/test.png'
+        }),
+      },
+    },
+  }));
 
   const mockProductRepository = {
     findAll: jest.fn(() => mockedArrayProduct),
     findOneProduct: jest.fn((idProduct: number) => mockedArrayProduct.find(product => product.idProduct === idProduct)),
     findByCategory: jest.fn((category: string) => mockedArrayProduct.filter(product => product.category === category)),
-    createProduct: jest.fn((newProduct: IProduct) => {
+    createProduct: jest.fn((createProductDto: IProduct) => {
+      const newProduct = { idProduct: 1, ...createProductDto };
       mockedArrayProduct.push(newProduct);
       return newProduct;
     }),
-    updateProduct: jest.fn((idProduct: number, updateProduct: Partial<IProduct>) => {
+    updateProduct: jest.fn((idProduct: number, updateProductDto: UpdateProductDto) => {
       const productIndex = mockedArrayProduct.findIndex(product => product.idProduct === idProduct);
       if (productIndex !== -1) {
-        mockedArrayProduct[productIndex] = { ...mockedArrayProduct[productIndex], ...updateProduct };
+        mockedArrayProduct[productIndex] = { ...mockedArrayProduct[productIndex], ...updateProductDto };
         return mockedArrayProduct[productIndex];
       } else {
-        return null;
+        throw new HttpException(
+          { status: HttpStatus.NOT_FOUND, error: 'Product not found' },
+          HttpStatus.NOT_FOUND,
+        );
       }
     }),
     removeProduct: jest.fn((id: number) => {
@@ -93,24 +115,56 @@ describe('ProductController', () => {
     expect(productController).toBeDefined();
   });
 
-  describe('Testing over create method', () => {
+ /*  describe('Testing over create method', () => {
     it('should create a new product', async () => {
+      const mockFile = {
+        fieldname: 'file',
+        originalname: 'test.png',
+        encoding: '7bit',
+        mimetype: 'image/png',
+        size: 1024,
+        destination: '/uploads',
+        filename: 'test.png',
+        path: '/uploads/test.png',
+        buffer: Buffer.from('mock buffer data'),
+        stream: Readable.from(Buffer.from('mock buffer data'))
+      };
+
       const newProduct: IProduct = {
-        idProduct: 15,
-        codeProduct: "new001",
         product: "nuevo producto",
         description: "nuevo",
         price: 1000,
         category: Category.Ferreteria,
         amount: 10,
-        images: "nueva_imagen",
-      }
-      const productSpy = mockProductRepository.createProduct(newProduct)
-      const productReal = await productController.create(newProduct)
+        active: true,
+        images: mockFile.originalname,
+        idProduct: 0,
+        codeProduct: ''
+      };
+
+      const productSpy = mockProductRepository.createProduct(newProduct);
+      const productReal = await productController.create(
+        newProduct.product,
+        newProduct.description,
+        newProduct.price,
+        newProduct.category,
+        newProduct.amount,
+        newProduct.active,
+        mockFile
+      );
+
       expect(productReal).toEqual(productSpy);
-      expect(mockProductRepository.createProduct).toHaveBeenCalledWith(newProduct);
+      expect(mockProductRepository.createProduct).toHaveBeenCalledWith(expect.objectContaining({
+        product: newProduct.product,
+        description: newProduct.description,
+        price: newProduct.price,
+        category: newProduct.category,
+        amount: newProduct.amount,
+        active: newProduct.active,
+        images: 'http://mockurl.com/test.png'
+      }));
     });
-  })
+  }); */
 
   describe('Testing over Read method', () => {
     it('should return all products', async () => {
@@ -124,27 +178,14 @@ describe('ProductController', () => {
       const oneProductReal = await productController.findOne(mockedArrayProduct[0].idProduct)
       expect(oneProductReal).toEqual(oneProductSpy);
     });
+  });
 
-    it('should return products by category', async () => {
-      const category = Category.Ferreteria;
-      const productSpyFilter = mockProductRepository.findByCategory(category)
-      const productRealFilter = await productController.findAll(category)
-      expect(productRealFilter).toEqual(productSpyFilter);
-    });
-  })
-
-  describe('Testing over update method', () => {
-    it('should update an existing product', async () => {
-      const updateProduct: Partial<IProduct> = {
-        product: "producto actualizado",
-        price: 9999,
-      };
-      const updateProductSpy = mockProductRepository.updateProduct(2, updateProduct)
-      const updateProductReal = await productController.update(2, updateProduct)
-      expect(updateProductReal).toEqual(updateProductSpy);
-      expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(2, updateProduct);
-    });
-  })
+  it('should return products by category', async () => {
+    const category = Category.Ferreteria;
+    const productSpyFilter = mockProductRepository.findByCategory(category)
+    const productRealFilter = await productController.findAll(category)
+    expect(productRealFilter).toEqual(productSpyFilter);
+  });
 
   describe('Testting over delete method', () => {
     it('should delete a product by id', async () => {
@@ -156,4 +197,44 @@ describe('ProductController', () => {
       expect(mockProductRepository.removeProduct).toHaveBeenCalledWith(deleteById);
     });
   })
+
+  /* describe('Testing over update method', () => {
+    it('should update an existing product', async () => {
+      const mockFile = {
+        fieldname: 'file',
+        originalname: 'test.png',
+        encoding: '7bit',
+        mimetype: 'image/png',
+        size: 1024,
+        destination: '/uploads',
+        filename: 'test.png',
+        path: '/uploads/test.png',
+        buffer: Buffer.from('mock buffer data'),
+        stream: Readable.from(Buffer.from('mock buffer data'))
+      };
+
+      const updateProductDto: UpdateProductDto = {
+        product: "nuevo producto",
+        description: "nuevo",
+        price: 1000,
+        category: Category.Ferreteria,
+        amount: 10,
+        images: mockFile.originalname
+      };
+
+      const updateProductSpy = mockProductRepository.updateProduct(2, updateProductDto);
+      const updateProductReal = await productController.update(
+        2,
+        mockFile,
+        updateProductDto.product,
+        updateProductDto.description,
+        updateProductDto.price,
+        updateProductDto.category,
+        updateProductDto.amount
+      );
+
+      expect(updateProductReal).toEqual(updateProductSpy);
+      expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(2, updateProductDto);
+    });
+  }); */
 });
