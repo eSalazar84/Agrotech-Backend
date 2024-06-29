@@ -113,7 +113,7 @@ export class ProductService {
           }
         })
         .on('end', (rowCount: number) => {
-          console.log(`Se han guardado ${rowCount - errorCount} filas válidas en la base de datos`);
+          
           if (products.length > 0) {
             fs.unlinkSync(filePath);
             this.productRepository.save(products);
@@ -122,7 +122,6 @@ export class ProductService {
               message: `Se han guardado ${rowCount - errorCount} filas válidas en la base de datos de forma exitosa.`
             });
           } else {
-            console.log('No hay productos válidos para guardar');
             reject({
               status: HttpStatus.BAD_REQUEST,
               message: 'No hay productos válidos para guardar'
@@ -155,18 +154,4 @@ export class ProductService {
     }
     return true;
   }
-
-  async getProductsByAmount(amount: number) {
-    amount = 5;
-
-    const products = await this.findAll()
-    const findLowAmount = products.filter(product => product.amount <= amount);
-
-
-    console.log(findLowAmount.length);
-
-
-    return findLowAmount
-  }
-
 }

@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsEnum, IsBoolean, IsNotEmpty, IsDateString, MaxLength, MinLength } from "class-validator"
+import { IsString, IsEmail, IsEnum, IsBoolean, IsNotEmpty, IsDateString, MaxLength, MinLength, Matches } from "class-validator"
 import { Expose } from "class-transformer"
 import { Rol } from "../../helpers/enums-type.enum"
 
@@ -41,6 +41,7 @@ export class CreateUserDto {
     @IsString()
     @Expose()
     @MaxLength(15)
+    @Matches(/^[+\d\s-]+$/, { message: 'El número de teléfono contiene caracteres no permitidos.' })
     readonly phone: string
 
     @IsDateString()

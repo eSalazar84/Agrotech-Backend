@@ -1,11 +1,8 @@
 # Backend Agrotech
 
-[![NestJS](https://img.shields.io/badge/NestJS-v7.0.0-red)](https://nestjs.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## Descripción
 
-Este proyecto aloja el servidor de Agrotech, y esta construido en [NestJS](https://nestjs.com/), permitiendo exponer Rest API. La idea es lograr una correcta comunicacion 
+Este proyecto aloja el servidor de Agrotech, el mismo esta construido en [NestJS](https://nestjs.com/), permitiendo exponer Rest API. La idea es lograr una correcta comunicacion 
 entre la base de datos y el cliente que peticiona, devolviendo una respuesta efectiva.
 
 ## Tabla de Contenidos
@@ -25,6 +22,7 @@ entre la base de datos y el cliente que peticiona, devolviendo una respuesta efe
 - Node.js (versión 12.x o superior)
 - npm (versión 6.x o superior)
 - Git ()
+- MySQL (versión 8.0.37)
 
 ### Pasos de Instalación
 

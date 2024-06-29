@@ -174,11 +174,4 @@ export class ProductController {
 
     return await this.productService.uploadProductsFromCsv(file)
   }
-
-  //NO ANDA
-  @Get('filter')
-  getFilteredProducts() {
-    const amount= 5
-    return this.productService.getProductsByAmount(amount);
-  }
 }
