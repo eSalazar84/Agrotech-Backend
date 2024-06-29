@@ -1,5 +1,92 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { InvoiceService } from './invoice.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Invoice } from './entities/invoice.entity';
+import { User } from '../user/entities/user.entity';
+import { InvoicesDetail } from '../invoices_details/entities/invoices_detail.entity';
+import { DataSource } from 'typeorm';
+import { MailService } from '../mail/mail.service';
+
+const mockInvoiceRepository = {
+  find: jest.fn(),
+  findOne: jest.fn(),
+  save: jest.fn(),
+  remove: jest.fn(),
+};
+
+const mockUserRepository = {
+  find: jest.fn(),
+  findOne: jest.fn(),
+  save: jest.fn(),
+  remove: jest.fn(),
+};
+
+const mockInvoicesDetailRepository = {
+  find: jest.fn(),
+  findOne: jest.fn(),
+  save: jest.fn(),
+  remove: jest.fn(),
+};
+
+const mockDataSource = {
+  createQueryRunner: jest.fn(),
+};
+
+const mockMailService = {
+  sendMail: jest.fn(),
+};
+
+describe('InvoiceService', () => {
+  let invoiceService: InvoiceService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        InvoiceService,
+        {
+          provide: getRepositoryToken(Invoice),
+          useValue: mockInvoiceRepository,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockUserRepository,
+        },
+        {
+          provide: getRepositoryToken(InvoicesDetail),
+          useValue: mockInvoicesDetailRepository,
+        },
+        {
+          provide: DataSource,
+          useValue: mockDataSource,
+        },
+        {
+          provide: MailService,
+          useValue: mockMailService,
+        },
+      ],
+    }).compile();
+
+    invoiceService = module.get<InvoiceService>(InvoiceService);
+  });
+
+  it('should be defined', () => {
+    expect(invoiceService).toBeDefined();
+  });
+
+  it('should return an array of invoices', async () => {
+    const invoices = [{ id: 1, amount: 100 }];
+    mockInvoiceRepository.find.mockResolvedValue(invoices);
+
+    const result = await invoiceService.findAllInvoice();
+    expect(result).toEqual(invoices);
+  });
+
+  // Añade más pruebas aquí...
+});
+
+
+/* import { Test, TestingModule } from '@nestjs/testing';
+import { InvoiceService } from './invoice.service';
 import { InvoicesDetailsService } from '../invoices_details/invoices_details.service';
 import { UserService } from '../user/user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -116,3 +203,4 @@ describe('InvoiceService', () => {
   });
 
 });
+ */

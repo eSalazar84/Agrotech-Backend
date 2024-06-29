@@ -8,5 +8,6 @@ export interface IProduct {
     price: number,
     category: Category,
     amount: number,
-    images: string
+    images: string,
+    active: boolean
 }

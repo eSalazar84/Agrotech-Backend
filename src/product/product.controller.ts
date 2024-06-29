@@ -100,6 +100,7 @@ export class ProductController {
     }),
     fileFilter: fileFilter
   }))
+
   async update(
     @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number,
     @UploadedFile() file: Express.Multer.File,

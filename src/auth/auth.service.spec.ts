@@ -61,7 +61,7 @@ describe('AuthService', () => {
         createdAt: new Date(),
         phone: '02281458596',
         birthDate: new Date('1984-09-20'),
-        address: "calle falsa 123"
+        address: "La Rioja 265"
       };
 
       const mockAccessToken: IAccess_token = {

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Invoice } from '../invoice/entities/invoice.entity';
-import { EMAIL_USER } from 'config';
+//import { EMAIL_USER } from 'config';
 import { IProduct } from '../product/interface/product.interface';
 
 
@@ -29,7 +29,7 @@ export class MailService {
         `).join('');
 
       const mailOptions = await this.mailerService.sendMail({
-        from: `"Agrotech" <${EMAIL_USER}>`,
+        from: `"Agrotech" <somos.agrotech@gmail.com>`,
         to,
         subject: 'Confirmación de compra',
         html: `
@@ -56,7 +56,7 @@ export class MailService {
     // Email al administrador
     const adminMailOptions = {
       from: email,
-      to: EMAIL_USER, // Email del administrador
+      to: 'somos.agrotech@gmail.com', // Email del administrador
       subject: `Formulario de contacto motivo: ${subject}`,
       html: `
           <p>Motivo de contacto: ${subject}</p>
@@ -68,7 +68,7 @@ export class MailService {
 
     // Email de confirmación al usuario
     const userMailOptions = {
-      from: `"Agrotech" <${EMAIL_USER}>`,
+      from: `"Agrotech" <somos.agrotech@gmail.com>`,
       to: email, // Email del usuario
       subject: 'Confirmación de recepción de mensaje',
       html: `
