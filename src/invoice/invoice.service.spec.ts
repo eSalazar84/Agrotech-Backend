@@ -241,69 +241,27 @@ describe('InvoiceService', () => {
       await expect(invoiceService.createInvoice(userMock.idUser, productMock)).rejects.toThrow(HttpException);
       expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalled();
     });
-  });
 
-  describe('InvoiceService', () => {
-    let invoiceService: InvoiceService;
-  
-    beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [
-          InvoiceService,
-          {
-            provide: getRepositoryToken(Invoice),
-            useValue: mockInvoiceRepository,
-          },
-          {
-            provide: getRepositoryToken(User),
-            useValue: mockUserRepository,
-          },
-          {
-            provide: getRepositoryToken(InvoicesDetail),
-            useValue: mockInvoicesDetailRepository,
-          },
-          {
-            provide: getRepositoryToken(Product),
-            useValue: mockProductRepository,
-          },
-          {
-            provide: DataSource,
-            useValue: mockDataSource,
-          },
-          {
-            provide: MailService,
-            useValue: mockMailService,
-          },
-        ],
-      }).compile();
-  
-      invoiceService = module.get<InvoiceService>(InvoiceService);
-    });
-  
-    it('should be defined', () => {
-      expect(invoiceService).toBeDefined();
-    });
-  
     it('should return all invoices', async () => {
       const invoices = [{ id: 1, amount: 100 }];
       mockInvoiceRepository.find.mockResolvedValue(invoices);
-  
+
       const result = await invoiceService.findAllInvoice();
       expect(result).toEqual(invoices);
     });
-  
+
     describe('findOneInvoice', () => {
       it('should return an invoice', async () => {
         const invoice = { idInvoice: 1, total: 100, user: {}, invoiceDetails: [] };
         mockInvoiceRepository.findOne.mockResolvedValue(invoice);
-  
+
         const result = await invoiceService.findOneInvoice(1);
         expect(result).toEqual(invoice);
       });
-  
+
       it('should throw an error if invoice not found', async () => {
         mockInvoiceRepository.findOne.mockResolvedValue(null);
-  
+
         await expect(invoiceService.findOneInvoice(999)).rejects.toThrow(HttpException);
         expect(mockInvoiceRepository.findOne).toHaveBeenCalledWith({
           where: { idInvoice: 999 },
@@ -311,19 +269,19 @@ describe('InvoiceService', () => {
         });
       });
     });
-  
+
     describe('findInvoiceByUser', () => {
       it('should return invoices for a user', async () => {
         const invoices = [{ idInvoice: 1, total: 100, user: { idUser: 1 }, invoiceDetails: [] }];
         mockInvoiceRepository.find.mockResolvedValue(invoices);
-  
+
         const result = await invoiceService.findInvoiceByUser(1);
         expect(result).toEqual(invoices);
       });
-  
+
       it('should throw an error if no invoices found for user', async () => {
         mockInvoiceRepository.find.mockResolvedValue([]);
-  
+
         await expect(invoiceService.findInvoiceByUser(999)).rejects.toThrow(HttpException);
         expect(mockInvoiceRepository.find).toHaveBeenCalledWith({
           where: { user: { idUser: 999 } },
@@ -331,47 +289,31 @@ describe('InvoiceService', () => {
         });
       });
     });
-  
+
     describe('removeInvoice', () => {
-      /* it('should remove an invoice successfully', async () => {
-        const invoice = {
-          idInvoice: 5,
-          invoiceDetails: [{ amount_sold: 10, product: { idProduct: 1, amount: 10 } }],
-        };
-  
-        jest.spyOn(mockQueryRunner.manager, 'findOne').mockResolvedValueOnce(invoice);
-        jest.spyOn(mockQueryRunner.manager, 'findOne').mockResolvedValueOnce(invoice.invoiceDetails[0].product);
-  
-        const result = await invoiceService.removeInvoice(1);
-  
-        expect(result).toEqual({ message: 'Invoice deleted successfully', statusCode: HttpStatus.OK });
-        expect(mockQueryRunner.manager.delete).toHaveBeenCalledTimes(2);
-        expect(mockQueryRunner.commitTransaction).toHaveBeenCalled();
-      }); */
-  
+
       it('should throw an error if invoice not found', async () => {
         jest.spyOn(mockQueryRunner.manager, 'findOne').mockResolvedValue(null);
-  
+
         await expect(invoiceService.removeInvoice(999)).rejects.toThrow(HttpException);
         expect(mockQueryRunner.manager.findOne).toHaveBeenCalledWith(Invoice, {
           where: { idInvoice: 999 },
           relations: ['invoiceDetails', 'invoiceDetails.product'],
         });
       });
-  
+
       it('should rollback transaction if error occurs during removal', async () => {
         const invoice = {
           idInvoice: 1,
           invoiceDetails: [{ amount_sold: 10, product: { idProduct: 1, amount: 10 } }],
         };
-  
+
         jest.spyOn(mockQueryRunner.manager, 'findOne').mockResolvedValue(invoice);
         jest.spyOn(mockQueryRunner.manager, 'delete').mockRejectedValue(new Error('Database error'));
-  
+
         await expect(invoiceService.removeInvoice(1)).rejects.toThrow(HttpException);
         expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalled();
       });
     });
   });
-  
 });

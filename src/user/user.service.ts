@@ -99,17 +99,17 @@ export class UserService {
 
     // Solo hashear la contraseña si se proporciona en la solicitud
     if (updateUserDto.password) {
-        updateUserDto.password = await this.hashPassword(updateUserDto.password);
+      updateUserDto.password = await this.hashPassword(updateUserDto.password);
     } else {
-        // No actualizar la contraseña
-        delete updateUserDto.password;
+      // No actualizar la contraseña
+      delete updateUserDto.password;
     }
 
     const updatedUser = Object.assign(userFound, updateUserDto);
     const savedUser = await this.userRepository.save(updatedUser);
     const { password, ...rest } = savedUser;
     return rest;
-}
+  }
 
   async removeUser(id: number): Promise<IUser> {
     const query: FindOneOptions = { where: { idUser: id } }

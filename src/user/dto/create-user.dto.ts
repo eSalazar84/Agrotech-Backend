@@ -4,7 +4,7 @@ import { Rol } from "../../helpers/enums-type.enum"
 
 
 export class CreateUserDto {
-    
+
     idUser: number
 
     @IsString()

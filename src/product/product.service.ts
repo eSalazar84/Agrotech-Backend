@@ -113,7 +113,7 @@ export class ProductService {
           }
         })
         .on('end', (rowCount: number) => {
-          
+
           if (products.length > 0) {
             fs.unlinkSync(filePath);
             this.productRepository.save(products);

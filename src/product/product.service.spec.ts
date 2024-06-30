@@ -97,13 +97,13 @@ describe('ProductService', () => {
         active: true
       }];
 
-      // Ajustamos el mock para que devuelva el array de productos
+      // find devolvera el 'array' de productos de la linea 89
       mockProductRepository.find.mockResolvedValue(products);
 
       const result = await productService.findAll();
 
       // Esperamos solo los productos activos
-      expect(result).toEqual(products.filter(product => product.active));
+      expect(result).toEqual(products.filter(product => product.active === true));
       expect(mockProductRepository.find).toHaveBeenCalled();
     });
 
@@ -149,7 +149,4 @@ describe('ProductService', () => {
       expect(result).toEqual(productDto);
     });
   })
-
-
-
 });

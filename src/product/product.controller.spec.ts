@@ -3,10 +3,8 @@ import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { IProduct } from './interface/product.interface';
 import { Category } from '../helpers/enums-type.enum';
-import { Readable } from 'stream';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
 
 describe('ProductController', () => {
   let productController: ProductController;
@@ -58,16 +56,6 @@ describe('ProductController', () => {
     }
   ];
 
-  jest.mock('cloudinary', () => ({
-    v2: {
-      uploader: {
-        upload: jest.fn().mockResolvedValue({
-          secure_url: 'http://mockurl.com/test.png'
-        }),
-      },
-    },
-  }));
-
   const mockProductRepository = {
     findAll: jest.fn(() => mockedArrayProduct),
     findOneProduct: jest.fn((idProduct: number) => mockedArrayProduct.find(product => product.idProduct === idProduct)),
@@ -115,57 +103,6 @@ describe('ProductController', () => {
     expect(productController).toBeDefined();
   });
 
- /*  describe('Testing over create method', () => {
-    it('should create a new product', async () => {
-      const mockFile = {
-        fieldname: 'file',
-        originalname: 'test.png',
-        encoding: '7bit',
-        mimetype: 'image/png',
-        size: 1024,
-        destination: '/uploads',
-        filename: 'test.png',
-        path: '/uploads/test.png',
-        buffer: Buffer.from('mock buffer data'),
-        stream: Readable.from(Buffer.from('mock buffer data'))
-      };
-
-      const newProduct: IProduct = {
-        product: "nuevo producto",
-        description: "nuevo",
-        price: 1000,
-        category: Category.Ferreteria,
-        amount: 10,
-        active: true,
-        images: mockFile.originalname,
-        idProduct: 0,
-        codeProduct: ''
-      };
-
-      const productSpy = mockProductRepository.createProduct(newProduct);
-      const productReal = await productController.create(
-        newProduct.product,
-        newProduct.description,
-        newProduct.price,
-        newProduct.category,
-        newProduct.amount,
-        newProduct.active,
-        mockFile
-      );
-
-      expect(productReal).toEqual(productSpy);
-      expect(mockProductRepository.createProduct).toHaveBeenCalledWith(expect.objectContaining({
-        product: newProduct.product,
-        description: newProduct.description,
-        price: newProduct.price,
-        category: newProduct.category,
-        amount: newProduct.amount,
-        active: newProduct.active,
-        images: 'http://mockurl.com/test.png'
-      }));
-    });
-  }); */
-
   describe('Testing over Read method', () => {
     it('should return all products', async () => {
       const productSpy = mockProductRepository.findAll();
@@ -197,44 +134,4 @@ describe('ProductController', () => {
       expect(mockProductRepository.removeProduct).toHaveBeenCalledWith(deleteById);
     });
   })
-
-  /* describe('Testing over update method', () => {
-    it('should update an existing product', async () => {
-      const mockFile = {
-        fieldname: 'file',
-        originalname: 'test.png',
-        encoding: '7bit',
-        mimetype: 'image/png',
-        size: 1024,
-        destination: '/uploads',
-        filename: 'test.png',
-        path: '/uploads/test.png',
-        buffer: Buffer.from('mock buffer data'),
-        stream: Readable.from(Buffer.from('mock buffer data'))
-      };
-
-      const updateProductDto: UpdateProductDto = {
-        product: "nuevo producto",
-        description: "nuevo",
-        price: 1000,
-        category: Category.Ferreteria,
-        amount: 10,
-        images: mockFile.originalname
-      };
-
-      const updateProductSpy = mockProductRepository.updateProduct(2, updateProductDto);
-      const updateProductReal = await productController.update(
-        2,
-        mockFile,
-        updateProductDto.product,
-        updateProductDto.description,
-        updateProductDto.price,
-        updateProductDto.category,
-        updateProductDto.amount
-      );
-
-      expect(updateProductReal).toEqual(updateProductSpy);
-      expect(mockProductRepository.updateProduct).toHaveBeenCalledWith(2, updateProductDto);
-    });
-  }); */
 });

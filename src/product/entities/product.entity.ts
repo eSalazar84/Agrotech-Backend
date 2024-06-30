@@ -15,7 +15,7 @@ export class Product {
     @Column({ type: 'varchar', length: 45 })
     product: string
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar' })
     description: string
 
     @Column({ type: 'int' })
@@ -27,7 +27,7 @@ export class Product {
     @Column({ type: 'int' })
     amount: number
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar' })
     images: string
 
     @Column({ type: 'boolean', default: true })
@@ -38,8 +38,7 @@ export class Product {
     getNameForCodeProduct() {
         this.codeProduct = getThreeWords(this.category)
     }
-    // @OneToMany(() => Invoice, invoice => invoice.product)
-    // invoices: Invoice[];
+
     @OneToMany(() => InvoicesDetail, invoiceDetail => invoiceDetail.product)
     public invoiceDetails: InvoicesDetail[]
 

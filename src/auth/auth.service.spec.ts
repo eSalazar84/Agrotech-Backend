@@ -145,7 +145,7 @@ describe('AuthService', () => {
         expect(result).toBe(true)
       })
 
-      
+
     })
   });
 });

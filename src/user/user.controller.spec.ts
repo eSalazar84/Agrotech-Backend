@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Rol } from '../helpers/enums-type.enum';
-import { MailService } from '../mail/mail.service'; // Importa el MailService
+import { MailService } from '../mail/mail.service'; 
 import { UserController } from './user.controller';
 
 export const mockedUserValues = [

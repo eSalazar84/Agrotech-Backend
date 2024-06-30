@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateInvoicesDetailDto } from './dto/create-invoices_detail.dto';
-import { UpdateInvoicesDetailDto } from './dto/update-invoices_detail.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvoicesDetail } from './entities/invoices_detail.entity';
 import { FindOneOptions, Repository } from 'typeorm';

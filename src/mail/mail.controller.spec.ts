@@ -26,6 +26,4 @@ describe('MailController', () => {
   it('should be defined', () => {
     expect(mailController).toBeDefined();
   });
-
-  // Añade aquí tus pruebas para MailController
 });

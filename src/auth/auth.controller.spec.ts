@@ -22,11 +22,11 @@ describe('AuthController', () => {
           provide: getRepositoryToken(AuthGuard),
           useValue: Repository,
         },
-        JwtService, 
+        JwtService,
         {
           provide: UserService,
           useValue: {
-            findUserByEmail: jest.fn(), 
+            findUserByEmail: jest.fn(),
           },
         },
       ],

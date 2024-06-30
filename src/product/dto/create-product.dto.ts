@@ -3,9 +3,7 @@ import { IsString, IsNumber, IsEnum, IsNotEmpty, MaxLength, IsOptional, IsBoolea
 import { Category } from '../../helpers/enums-type.enum'
 
 export class CreateProductDto {
-    /* @IsOptional()
-    idProduct: number  */
-
+    
     @IsString()
     @IsNotEmpty()
     @Expose()
