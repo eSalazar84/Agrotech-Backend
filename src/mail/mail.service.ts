@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Invoice } from '../invoice/entities/invoice.entity';
 import { IProduct } from '../product/interface/product.interface';
-
+import { formatPrice } from '../helpers/formatPrice';
 
 @Injectable()
 export class MailService {
@@ -18,12 +18,19 @@ export class MailService {
   }
 
   async sendPurchaseConfirmationEmail(to: string, invoice: Invoice, products: Partial<IProduct>[]): Promise<void> {
+    const invoiceDate = new Date(invoice.invoiceDate);
+    const formattedDate = invoiceDate.toLocaleDateString('es-AR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
     try {
       const productsHtml = products.map(product => `
             <p>Producto: ${product.product}</p>
-            <p>Precio: ${product.price}</p>
+            <p>Precio: ${formatPrice(product.price)}</p>
             <p>Cantidad: ${product.amount}</p>
-            <p>Total: ${product.price * product.amount}</p>
+            <p>Total: ${formatPrice(product.price * product.amount)}</p>
+            <img src="${product.images}" alt="${product.product}" style="width: 100px; height: 100px;" />
             <hr>
         `).join('');
 
@@ -34,9 +41,9 @@ export class MailService {
         html: `
                 <p>Hola ${to},</p>
                 <p>Gracias por tu compra. Aquí están los detalles de tu factura:</p>
-                <p>Fecha de la factura: ${invoice.invoiceDate}</p>
-                <p>Total sin IVA: ${invoice.total_without_iva}</p>
-                <p>Total con IVA: ${invoice.total_with_iva}</p>
+                <p>Fecha de la factura: ${formattedDate}</p>
+                <p>Total sin IVA: $${formatPrice(invoice.total_without_iva)}</p>
+                <p>Total con IVA: $${formatPrice(invoice.total_with_iva)}</p>
                 <h3>Productos Comprados:</h3>
                 ${productsHtml}
                 <p>¡Esperamos verte pronto de nuevo!</p>
