@@ -14,4 +14,6 @@ export class CreateInvoicesDetailDto {
     @Expose()
     @IsNotEmpty()
     readonly id_invoice: number;
+
+    price_at_purchase:number
 }

@@ -29,43 +29,33 @@ export class InvoiceService {
     if (!userFound) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
     try {
       const invoiceDate = new Date();
       const initialTotalWithoutIva = 0;
-
       const invoice = this.invoiceRepository.create({ invoiceDate, total_without_iva: initialTotalWithoutIva, user: userFound });
       const savedInvoice = await queryRunner.manager.save(invoice);
       let totalWithoutIva = 0;
-
       // Lista para almacenar los detalles de los productos vendidos
       const soldProductsDetails = [];
-
       for (const item of products) {
         const queryProduct: FindOneOptions<Product> = { where: { idProduct: item.idProduct } };
         const productFound = await queryRunner.manager.findOne(Product, queryProduct);
-
         if (!productFound || productFound.amount < item.amount) {
           throw new HttpException(`Product with ID ${item.idProduct} not found or insufficient stock`, HttpStatus.BAD_REQUEST);
         }
-
         const invoiceDetail = this.invoicesDetailsRepository.create({
           amount_sold: item.amount,
           invoice: savedInvoice,
           product: productFound,
+          price_at_purchase: productFound.price,  // Guardar el precio actual del producto
         });
-
         await queryRunner.manager.save(invoiceDetail);
-
         productFound.amount -= item.amount;
         await queryRunner.manager.save(productFound);
-
         totalWithoutIva += productFound.price * item.amount;
-
         // Añadir detalles del producto vendido a la lista
         soldProductsDetails.push({
           product: productFound.product,
@@ -73,17 +63,12 @@ export class InvoiceService {
           amount: item.amount
         });
       }
-
       savedInvoice.total_without_iva = totalWithoutIva;
       savedInvoice.total_with_iva = totalWithoutIva * 1.21;
-
       const finalInvoice = await queryRunner.manager.save(savedInvoice);
-
       await queryRunner.commitTransaction();
-
       // Envío del correo electrónico con los detalles de los productos vendidos
       await this.mailService.sendPurchaseConfirmationEmail(userFound.email, finalInvoice, soldProductsDetails);
-
       return {
         invoiceDate: finalInvoice.invoiceDate,
         total_without_iva: finalInvoice.total_without_iva,
@@ -162,7 +147,7 @@ export class InvoiceService {
       await queryRunner.commitTransaction();
 
       return { statusCode: HttpStatus.OK, message: 'Invoice deleted successfully' };
-      
+
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

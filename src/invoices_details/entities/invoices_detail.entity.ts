@@ -10,6 +10,9 @@ export class InvoicesDetail {
   @Column()
   amount_sold: number;
 
+  @Column()
+  price_at_purchase: number;
+
   @ManyToOne(() => Invoice, invoice => invoice.invoiceDetails)
   invoice: Invoice;
 
