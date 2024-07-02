@@ -30,7 +30,6 @@ export class MailService {
             <p>Precio: ${formatPrice(product.price)}</p>
             <p>Cantidad: ${product.amount}</p>
             <p>Total: ${formatPrice(product.price * product.amount)}</p>
-            <img src="${product.images}" alt="${product.product}" style="width: 100px; height: 100px;" />
             <hr>
         `).join('');
 

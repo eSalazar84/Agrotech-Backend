@@ -9,7 +9,7 @@ export class Product {
     @PrimaryGeneratedColumn()
     idProduct: number
 
-    @Column({ type: 'varchar', length: 8 })
+    @Column({ type: 'varchar', length: 10 })
     codeProduct: string
 
     @Column({ type: 'varchar', length: 45 })

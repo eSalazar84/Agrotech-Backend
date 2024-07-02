@@ -21,7 +21,7 @@ entre la base de datos y el cliente que peticiona, devolviendo una respuesta efe
 
 - Node.js (versión 12.x o superior)
 - npm (versión 6.x o superior)
-- Git ()
+- Git (versión 2.45.2)
 - MySQL (versión 8.0.37)
 
 ### Pasos de Instalación
@@ -29,7 +29,7 @@ entre la base de datos y el cliente que peticiona, devolviendo una respuesta efe
 1. Clona el repositorio:
     ```bash
     git clone https://github.com/eSalazar84/Agrotech-Backend.git
-    cd tu-repositorio
+    cd repositorio-para-alojar-el-programa
     ```
 
 2. Instala las dependencias:
@@ -64,22 +64,30 @@ src/
 ├── app.module.ts
 ├── main.ts
 │
-├── helpers/
-│
 ├── modules/
 │   ├── auth/
+├── ├── helpers/
 │   ├── invoice/
 │   ├── invoice-details/
-│   ├── user/
-│   └── products/
+├── ├── mail/
+│   ├── products/
+│   └── user/
 │
 ├── uploads/
+└── uploads-images/
 ```
 
 ## Dependencias
 
 - [NestJS](https://nestjs.com/)
-- [TypeORM]()
+- [TypeORM - MySQL](https://docs.nestjs.com/techniques/database)
+- [class-transformer_class-validator](https://docs.nestjs.com/techniques/validation)
+- [bcrypt](https://docs.nestjs.com/security/encryption-and-hashing)
+- [cloudinary](https://cloudinary.com/documentation/node_integration)
+- [multer](https://docs.nestjs.com/techniques/file-upload#array-of-files)
+- [fast-csv](https://www.npmjs.com/package/fast-csv)
+- [nodemailer](https://www.nodemailer.com/)
+
 
 
 ## Documentacion de la API
@@ -94,14 +102,14 @@ Pruebas Unitarias
 Para ejecutar las pruebas unitarias, usa el siguiente comando:
 
 ``` bash
-npm run test
+npm run test:watch
 ```
 
-Pruebas End-to-End
-Para ejecutar las pruebas end-to-end, usa el siguiente comando:
+Coverage
+Para conocer la covertura de testeo de la aplicación, usa el siguiente comando:
 
 ``` bash
-npm run test:e2e
+npm run test:cov
 ```
 
 ## Autores
