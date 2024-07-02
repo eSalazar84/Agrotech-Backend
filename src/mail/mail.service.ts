@@ -8,16 +8,16 @@ import { formatPrice } from '../helpers/formatPrice';
 export class MailService {
   constructor(private readonly mailerService: MailerService) { }
 
-  async sendMail(to: string, subject: string, template: string, context: any): Promise<void> {
+  async sendMail(to: string, subject: string, template: string, context: any) {
     await this.mailerService.sendMail({
       to,
       subject,
-      template, // Nombre del archivo de plantilla sin extensión
-      context, // Datos para la plantilla
+      template,
+      context,
     });
   }
 
-  async sendPurchaseConfirmationEmail(to: string, invoice: Invoice, products: Partial<IProduct>[]): Promise<void> {
+  async sendPurchaseConfirmationEmail(to: string, invoice: Invoice, products: Partial<IProduct>[]) {
     const invoiceDate = new Date(invoice.invoiceDate);
     const formattedDate = invoiceDate.toLocaleDateString('es-AR', {
       year: 'numeric',
@@ -49,11 +49,9 @@ export class MailService {
             `,
       });
 
-      console.log('Correo electrónico enviado correctamente');
       return mailOptions;
     } catch (error) {
-      console.error('Error al enviar el correo electrónico:', error);
-      throw new HttpException('Error al enviar el correo electrónico', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(`Error al enviar el correo electrónico`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -74,7 +72,7 @@ export class MailService {
     // Email de confirmación al usuario
     const userMailOptions = {
       from: `"Agrotech" <somos.agrotech@gmail.com>`,
-      to: email, // Email del usuario
+      to: email, // (Email del usuario)
       subject: 'Confirmación de recepción de mensaje',
       html: `
       <p>Hola ${name}!</p>
@@ -85,7 +83,7 @@ export class MailService {
       `
     };
 
-    // Enviar ambos correos electrónicos
+    // Enviamos ambos correos electrónicos
     await this.mailerService.sendMail(adminMailOptions);
     await this.mailerService.sendMail(userMailOptions);
   }
