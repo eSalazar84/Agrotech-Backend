@@ -88,13 +88,11 @@ export class ProductService {
       fs.createReadStream(filePath)
         .pipe(csv.parse({ headers: true }))
         .on('error', error => {
-          console.error(error);
-          reject({ status: 500, message: 'Error interno del servidor' });
+          reject({ status: 500, message: `Error interno del servidor ${error.message}` });
         })
         .on('data', async (row: CreateProductDto) => {
           try {
             if (!this.isValidProduct(row)) {
-              console.error('Registro no válido:', row);
               errorCount++;
               return;
             }
