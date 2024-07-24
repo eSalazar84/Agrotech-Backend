@@ -16,11 +16,11 @@ export class ProductService {
   ) { }
 
   async createProduct(createProductDto: CreateProductDto): Promise<CreateProductDto> {
-    const query = await this.productRepository.findOne({ where: { product: createProductDto.product } })
+    /* const query = await this.productRepository.findOne({ where: { product: createProductDto.product } })
     if (query) throw new HttpException({
       status: HttpStatus.CONFLICT,
       error: `el producto ${createProductDto.product} ya esta cargado en el sistema`
-    }, HttpStatus.CONFLICT)
+    }, HttpStatus.CONFLICT) */
     const newUser = this.productRepository.create(createProductDto);
     return this.productRepository.save(newUser)
   }
@@ -106,6 +106,7 @@ export class ProductService {
                 amount: row.amount,
                 images: row.images
               }));
+
           } catch (error) {
             errorCount++;
           }
@@ -139,16 +140,16 @@ export class ProductService {
   }
 
   private isValidProduct(row: CreateProductDto): boolean {
+    const categoryValues = Object.values(Category);
+  
     if (!row.amount
-      || (row.category in Category)
+      || !categoryValues.includes(row.category) // Verifica que la categoría esté en el enum
       || !row.description
       || !row.images
       || !row.price
       || row.product.length > 45
     ) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST, error: `el registro contiene errores. Corrija el error por favor`
-      }, HttpStatus.BAD_REQUEST)
+      return false;
     }
     return true;
   }

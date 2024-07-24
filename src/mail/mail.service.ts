@@ -34,7 +34,7 @@ export class MailService {
         `).join('');
 
       const mailOptions = await this.mailerService.sendMail({
-        from: `"Agrotech" <somos.agrotech@gmail.com>`,
+        from: `"Agrotech" ${process.env.EMAIL_USER}`,
         to,
         subject: 'Confirmación de compra',
         html: `
